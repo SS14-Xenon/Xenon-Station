@@ -51,6 +51,7 @@
 
 using System.Linq;
 using System.Text.RegularExpressions;
+using Content.Shared.ADT.CCVar;
 using Content.Shared.CCVar;
 using Content.Shared.Dataset;
 using Content.Shared.GameTicking;
@@ -121,6 +122,18 @@ namespace Content.Shared.Preferences
         /// </summary>
         [DataField]
         public string FlavorText { get; set; } = string.Empty;
+        //ADT-tweak-start
+        /// <summary>
+        /// ООС заметки у персонажа
+        /// </summary>
+        [DataField]
+        public string OOCNotes { get; set; } = string.Empty;
+        /// <summary>
+        /// ссылка на хэдшот персонажа
+        /// </summary>
+        [DataField]
+        public string HeadshotUrl { get; set; } = string.Empty;
+        //ADT-tweak-end
 
         /// <summary>
         /// Associated <see cref="SpeciesPrototype"/> for this profile.
@@ -202,7 +215,12 @@ namespace Content.Shared.Preferences
             HashSet<ProtoId<AntagPrototype>> antagPreferences,
             HashSet<ProtoId<TraitPrototype>> traitPreferences,
             Dictionary<string, RoleLoadout> loadouts,
-            ProtoId<BarkPrototype> barkVoice) // Goob Station - Barks
+            ProtoId<BarkPrototype> barkVoice, // Goob Station - Barks
+            //ADT-tweak-start
+            string oocNotes,
+            string headshotUrl
+            )
+            //ADT-tweak-end
         {
             Name = name;
             FlavorText = flavortext;
@@ -220,6 +238,10 @@ namespace Content.Shared.Preferences
             _traitPreferences = traitPreferences;
             _loadouts = loadouts;
             BarkVoice = barkVoice; // Goob Station - Barks
+            // ADT start
+            OOCNotes = oocNotes;
+            HeadshotUrl = headshotUrl;
+            // ADT end
 
             var hasHighPrority = false;
             foreach (var (key, value) in _jobPriorities)
@@ -253,7 +275,12 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<AntagPrototype>>(other.AntagPreferences),
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts),
-                other.BarkVoice) // Goob Station - Barks
+                other.BarkVoice, // Goob Station - Barks
+                // ADT start
+                other.OOCNotes,
+                other.HeadshotUrl
+                )
+                // ADT end
         {
         }
 
@@ -362,7 +389,16 @@ namespace Content.Shared.Preferences
         {
             return new(this) { FlavorText = flavorText };
         }
-
+        //ADT-tweak-start: ООС заметки и ЮРЛ
+        public HumanoidCharacterProfile WithOOCNotes(string oocNotes)
+        {
+            return new(this) { OOCNotes = oocNotes };
+        }
+        public HumanoidCharacterProfile WithHeadshotUrl(string headshotUrl)
+        {
+            return new(this) { HeadshotUrl = headshotUrl };
+        }
+        //ADT-tweak-end
         public HumanoidCharacterProfile WithAge(int age)
         {
             return new(this) { Age = age };
@@ -580,6 +616,10 @@ namespace Content.Shared.Preferences
             if (!_traitPreferences.SequenceEqual(other._traitPreferences)) return false;
             if (!Loadouts.SequenceEqual(other.Loadouts)) return false;
             if (FlavorText != other.FlavorText) return false;
+            // ADT-tweak-start
+            if (OOCNotes != other.OOCNotes) return false;
+            if (HeadshotUrl != other.HeadshotUrl) return false;
+            // ADT-tweak-end
             return Appearance.MemberwiseEquals(other.Appearance);
         }
 
@@ -674,6 +714,27 @@ namespace Content.Shared.Preferences
             // end Goobstation: port EE height/width sliders
 
             var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex);
+            
+            //ADT-tweak-start
+            string oocNotes = OOCNotes; // Initialize with the property value
+            if (oocNotes.Length > maxFlavorTextLength)
+            {
+                oocNotes = FormattedMessage.RemoveMarkupOrThrow(oocNotes)[..maxFlavorTextLength];
+            }
+            else
+            {
+                oocNotes = FormattedMessage.RemoveMarkupOrThrow(oocNotes);
+            }
+
+            string headshoturl = HeadshotUrl;
+            if (headshoturl.Length > 500 || !HeadshotUrl.Contains(configManager.GetCVar(ADTCCVars.HeadshotUrl))) //чутка хардкод, но это просто чтобы не засирали ссылкками на что угодно
+            {
+                headshoturl = string.Empty;
+            }
+            //максимальная длина ООЦ заметок не больше чем длина флавора
+            //ADT-tweak-end
+
+            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex, sponsorPrototypes);
 
             var prefsUnavailableMode = PreferenceUnavailable switch
             {
@@ -721,6 +782,10 @@ namespace Content.Shared.Preferences
 
             Name = name;
             FlavorText = flavortext;
+            //ADT-tweak-start
+            OOCNotes = oocNotes;
+            HeadshotUrl = headshoturl;
+            //ADT-tweak-end
             Age = age;
             Height = height; // Goobstation: port EE height/width sliders
             Width = width; // Goobstation: port EE height/width sliders
@@ -841,6 +906,10 @@ namespace Content.Shared.Preferences
             hashCode.Add(_traitPreferences);
             hashCode.Add(_loadouts);
             hashCode.Add(Name);
+            //ADT-tweak-start
+            hashCode.Add(OOCNotes);
+            hashCode.Add(HeadshotUrl);
+            //ADT-tweak-end
             hashCode.Add(FlavorText);
             hashCode.Add(Species);
             hashCode.Add(Height); // Goobstation: port EE height/width sliders
