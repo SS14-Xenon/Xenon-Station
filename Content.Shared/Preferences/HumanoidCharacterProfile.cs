@@ -52,6 +52,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Content.Shared.ADT.CCVar;
+using Content.Shared.ADT.CharecterFlavor;
 using Content.Shared.CCVar;
 using Content.Shared.Dataset;
 using Content.Shared.GameTicking;
@@ -132,7 +133,18 @@ namespace Content.Shared.Preferences
         /// ссылка на хэдшот персонажа
         /// </summary>
         [DataField]
-        public string HeadshotUrl { get; set; } = string.Empty;
+        public string HeadshotUrl { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Установить URL хэдшота с валидацией.
+        /// Валидация происходит один раз при установке, а не при каждом спавне.
+        /// </summary>
+        public void SetHeadshotUrl(string url, string allowedDomain)
+        {
+            HeadshotUrl = HeadshotHashHelper.IsValidHeadshotUrl(url, allowedDomain)
+                ? url
+                : string.Empty;
+        }
         //ADT-tweak-end
 
         /// <summary>
@@ -725,20 +737,6 @@ namespace Content.Shared.Preferences
             {
                 oocNotes = FormattedMessage.RemoveMarkupOrThrow(oocNotes);
             }
-
-            string headshoturl = HeadshotUrl;
-            var allowedDomain = configManager.GetCVar(ADTCCVars.HeadshotDomain);
-
-            // Простая проверка URL
-            if (string.IsNullOrWhiteSpace(headshoturl) ||
-                headshoturl.Length > 500 ||
-                !(headshoturl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
-                headshoturl.StartsWith("https://", StringComparison.OrdinalIgnoreCase)) ||
-                !headshoturl.Contains(allowedDomain, StringComparison.OrdinalIgnoreCase))
-            {
-                headshoturl = string.Empty;
-            }
-            //максимальная длина ООЦ заметок не больше чем длина флавора
             //ADT-tweak-end
 
             var prefsUnavailableMode = PreferenceUnavailable switch
@@ -789,7 +787,7 @@ namespace Content.Shared.Preferences
             FlavorText = flavortext;
             //ADT-tweak-start
             OOCNotes = oocNotes;
-            HeadshotUrl = headshoturl;
+            // HeadshotUrl уже валидирован при установке через SetHeadshotUrl
             //ADT-tweak-end
             Age = age;
             Height = height; // Goobstation: port EE height/width sliders
