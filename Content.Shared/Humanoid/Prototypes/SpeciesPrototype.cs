@@ -67,6 +67,14 @@ public sealed partial class SpeciesPrototype : IPrototype
     [DataField(required: true)]
     public bool RoundStart { get; private set; } = false;
 
+    // CorvaxGoob-Sponsors-Start
+    /// <summary>
+    /// Whether the species is available only for sponsors
+    /// </summary>
+    [DataField]
+    public bool SponsorOnly { get; private set; } = false;
+    // CorvaxGoob-Sponsors-End
+
     // The below two are to avoid fetching information about the species from the entity
     // prototype.
 
@@ -141,7 +149,7 @@ public sealed partial class SpeciesPrototype : IPrototype
     ///     Characters younger than this appear young.
     /// </summary>
     [DataField]
-    public int YoungAge = 30;
+    public int YoungAge = 40; // Corvax-Goob
 
     /// <summary>
     ///     Characters older than this appear old. Characters in between young and old age appear middle aged.

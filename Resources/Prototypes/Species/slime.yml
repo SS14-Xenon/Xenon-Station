@@ -38,6 +38,8 @@
     Undershirt: MobHumanoidAnyMarking
     Chest: MobSlimeChest
     Groin: MobSlimeGroin
+    HeadTop: MobHumanoidAnyMarking # CorvaxGoob-Sponsors
+    Tail: MobHumanoidAnyMarking # CorvaxGoob-Sponsors
     Eyes: MobHumanoidEyes
     LArm: MobSlimeLArm
     RArm: MobSlimeRArm
@@ -59,6 +61,12 @@
       required: false
     FacialHair:
       points: 1
+      required: false
+    Tail: # :despair:
+      points: 1 # CorvaxGoob-Sponsors
+      required: false
+    HeadTop: # :skull:
+      points: 1 # CorvaxGoob-Sponsors
       required: false
     Chest:
       points: 8
