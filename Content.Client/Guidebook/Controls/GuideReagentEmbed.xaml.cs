@@ -209,6 +209,9 @@ public sealed partial class GuideReagentEmbed : BoxContainer, IDocumentTag, ISea
         description.PushNewline();
         description.AddMarkupOrThrow(Loc.GetString("guidebook-reagent-physical-description",
             ("description", reagent.LocalizedPhysicalDescription)));
+        description.PushNewline();
+        description.AddMarkupOrThrow(Loc.GetString("guidebook-reagent-ph",
+            ("ph", reagent.PH.ToString("0.0"))));
         ReagentDescription.SetMessage(description);
     }
 

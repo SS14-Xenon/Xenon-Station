@@ -54,6 +54,7 @@
   physicalDesc: reagent-physical-desc-acidic
   flavor: bitter
   color: "#AF14B7"
+  pH: 5.0
   boilingPoint: 55.5
   meltingPoint: -50.0
 
@@ -64,6 +65,7 @@
   physicalDesc: reagent-physical-desc-acidic
   flavor: bitter
   color: "#E7EA91"
+  pH: 5.0
   boilingPoint: 55.5
   meltingPoint: -50.0
   metabolisms:
@@ -173,6 +175,7 @@
   desc: reagent-desc-hydroxide
   physicalDesc: reagent-physical-desc-alkaline
   color: "white"
+  pH: 13.5
   boilingPoint: 1661.0
   meltingPoint: 596.0
 
@@ -182,6 +185,7 @@
   desc: reagent-desc-sodium-hydroxide
   physicalDesc: reagent-physical-desc-alkaline
   color: "white"
+  pH: 14.0
   boilingPoint: 1661.0
   meltingPoint: 596.0
   metabolisms:

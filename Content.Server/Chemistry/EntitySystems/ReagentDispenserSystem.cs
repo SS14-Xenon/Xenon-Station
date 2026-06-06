@@ -34,6 +34,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 using System.Linq;
+using Content.Shared._Ganimed.Chemistry;
 using Content.Server.Chemistry.Components;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.EntitySystems;
@@ -92,7 +93,7 @@ namespace Content.Server.Chemistry.EntitySystems
             UpdateUiState(ent);
         }
 
-        private void UpdateUiState(Entity<ReagentDispenserComponent> reagentDispenser)
+        public void UpdateUiState(Entity<ReagentDispenserComponent> reagentDispenser)
         {
             var outputContainer = _itemSlotsSystem.GetItemOrNull(reagentDispenser, SharedReagentDispenser.OutputSlotName);
             var outputContainerInfo = BuildOutputContainerInfo(outputContainer);
@@ -112,7 +113,8 @@ namespace Content.Server.Chemistry.EntitySystems
             {
                 return new ContainerInfo(Name(container.Value), solution.Volume, solution.MaxVolume)
                 {
-                    Reagents = solution.Contents
+                    Reagents = solution.Contents,
+                    SolutionPH = ChemistryPH.GetSolutionPH(solution, _prototypeManager),
                 };
             }
 

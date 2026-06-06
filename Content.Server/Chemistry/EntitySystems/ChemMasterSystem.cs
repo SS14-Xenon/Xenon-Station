@@ -35,6 +35,7 @@
 using Content.Server.Chemistry.Components;
 using Content.Server.Popups;
 using Content.Server.Storage.EntitySystems;
+using Content.Shared._Ganimed.Chemistry;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
@@ -72,6 +73,7 @@ namespace Content.Server.Chemistry.EntitySystems
         [Dependency] private readonly StorageSystem _storageSystem = default!;
         [Dependency] private readonly LabelSystem _labelSystem = default!;
         [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
+        [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
 
         private static readonly EntProtoId PillPrototypeId = "Pill";
 
@@ -98,7 +100,7 @@ namespace Content.Server.Chemistry.EntitySystems
             UpdateUiState(ent);
         }
 
-        private void UpdateUiState(Entity<ChemMasterComponent> ent, bool updateLabel = false)
+        public void UpdateUiState(Entity<ChemMasterComponent> ent, bool updateLabel = false)
         {
             var (owner, chemMaster) = ent;
             if (!_solutionContainerSystem.TryGetSolution(owner, SharedChemMaster.BufferSolutionName, out _, out var bufferSolution))
@@ -393,11 +395,12 @@ namespace Content.Server.Chemistry.EntitySystems
             };
         }
 
-        private static ContainerInfo BuildContainerInfo(string name, Solution solution)
+        private ContainerInfo BuildContainerInfo(string name, Solution solution)
         {
             return new ContainerInfo(name, solution.Volume, solution.MaxVolume)
             {
-                Reagents = solution.Contents
+                Reagents = solution.Contents,
+                SolutionPH = ChemistryPH.GetSolutionPH(solution, _prototypeManager),
             };
         }
     }

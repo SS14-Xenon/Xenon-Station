@@ -209,6 +209,7 @@
   physicalDesc: reagent-physical-desc-strong-smelling
   flavor: acid
   color: "#a1000b"
+  pH: 0.0
   boilingPoint: 78.2 # This isn't a real chemical...
   meltingPoint: -19.4
   plantMetabolism:
@@ -277,6 +278,7 @@
   physicalDesc: reagent-physical-desc-strong-smelling
   flavor: acid
   color: "#5050ff"
+  pH: 0.0
   boilingPoint: 165
   meltingPoint: -87
   reactiveEffects:
@@ -317,6 +319,7 @@
   physicalDesc: reagent-physical-desc-oily
   flavor: acid
   color: "#BF8C00"
+  pH: 1.0
   recognizable: true
   boilingPoint: 337.0
   meltingPoint: 10.31

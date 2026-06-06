@@ -236,6 +236,7 @@
   physicalDesc: reagent-physical-desc-pungent
   flavor: bitter
   color: "#77b58e"
+  pH: 11.6
   boilingPoint: -33.0
   meltingPoint: -77.7
   plantMetabolism:

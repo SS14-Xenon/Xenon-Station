@@ -116,6 +116,7 @@
 using System.Collections.Frozen;
 using System.Linq;
 using Content.Goobstation.Maths.FixedPoint;
+using Content.Shared._Ganimed.Chemistry;
 using System.Text.Json.Serialization;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Prototypes;
@@ -189,6 +190,12 @@ namespace Content.Shared.Chemistry.Reagent
 
         [DataField("color")]
         public Color SubstanceColor { get; private set; } = Color.White;
+
+        [DataField("pH")]
+        public float PH { get; private set; } = ChemistryPH.NeutralPH;
+
+        [DataField]
+        public bool ReactionAgent { get; private set; }
 
         /// <summary>
         ///     The specific heat of the reagent.

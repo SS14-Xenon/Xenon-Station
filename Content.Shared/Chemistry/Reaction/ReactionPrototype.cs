@@ -81,6 +81,25 @@ namespace Content.Shared.Chemistry.Reaction
         public Dictionary<string, FixedPoint2> Products = new();
 
         /// <summary>
+        ///     The minimum solution pH required for this reaction to occur.
+        /// </summary>
+        [DataField("minPH")]
+        public float MinimumPH = 3f;
+
+        /// <summary>
+        ///     The maximum solution pH required for this reaction to occur.
+        /// </summary>
+        [DataField("maxPH")]
+        public float MaximumPH = 10f;
+
+        /// <summary>
+        ///     Maximum amount of reaction units processed per reaction pass.
+        ///     Reactions may override this in YAML for slower or faster chemistry.
+        /// </summary>
+        [DataField("reactionRate")]
+        public FixedPoint2 ReactionRate = FixedPoint2.New(5);
+
+        /// <summary>
         /// Effects to be triggered when the reaction occurs.
         /// </summary>
         [DataField("effects")] public List<EntityEffect> Effects = new();

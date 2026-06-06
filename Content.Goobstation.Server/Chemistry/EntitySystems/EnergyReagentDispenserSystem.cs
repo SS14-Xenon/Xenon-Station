@@ -37,6 +37,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 using System.Linq;
+using Content.Shared._Ganimed.Chemistry;
+using Content.Server.Chemistry.Components;
+using Content.Server.Chemistry.EntitySystems;
 using Content.Goobstation.Server.Chemistry.Components;
 using Content.Goobstation.Shared.Chemistry;
 using Content.Shared.Chemistry;
@@ -75,6 +78,8 @@ namespace Content.Goobstation.Server.Chemistry.EntitySystems
         [Dependency] private readonly UserInterfaceSystem _userInterfaceSystem = default!;
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly BatterySystem _battery = default!;
+        [Dependency] private readonly ReagentDispenserSystem _reagentDispenser = default!;
+        [Dependency] private readonly ChemMasterSystem _chemMaster = default!;
 
         public override void Initialize()
         {
@@ -85,6 +90,7 @@ namespace Content.Goobstation.Server.Chemistry.EntitySystems
             SubscribeLocalEvent<EnergyReagentDispenserComponent, EntInsertedIntoContainerMessage>(SubscribeUpdateUiState);
             SubscribeLocalEvent<EnergyReagentDispenserComponent, EntRemovedFromContainerMessage>(SubscribeUpdateUiState);
             SubscribeLocalEvent<EnergyReagentDispenserComponent, BoundUIOpenedEvent>(SubscribeUpdateUiState);
+            SubscribeLocalEvent<FitsInDispenserComponent, SolutionContainerChangedEvent>(OnInsertedContainerSolutionChanged);
 
             SubscribeLocalEvent<EnergyReagentDispenserComponent, EnergyReagentDispenserSetDispenseAmountMessage>(OnSetDispenseAmountMessage);
             SubscribeLocalEvent<EnergyReagentDispenserComponent, EnergyReagentDispenserDispenseReagentMessage>(OnDispenseReagentMessage);
@@ -95,6 +101,33 @@ namespace Content.Goobstation.Server.Chemistry.EntitySystems
         }
 
         private void SubscribeUpdateUiState<T>(Entity<EnergyReagentDispenserComponent> ent, ref T ev) => UpdateUiState(ent);
+
+        private void OnInsertedContainerSolutionChanged(Entity<FitsInDispenserComponent> container, ref SolutionContainerChangedEvent ev)
+        {
+            var reagentQuery = EntityQueryEnumerator<ReagentDispenserComponent>();
+            while (reagentQuery.MoveNext(out var uid, out var dispenser))
+            {
+                if (_itemSlotsSystem.GetItemOrNull(uid, SharedReagentDispenser.OutputSlotName) == container.Owner)
+                    _reagentDispenser.UpdateUiState((uid, dispenser));
+            }
+
+            var chemMasterQuery = EntityQueryEnumerator<ChemMasterComponent>();
+            while (chemMasterQuery.MoveNext(out var uid, out var chemMaster))
+            {
+                if (_itemSlotsSystem.GetItemOrNull(uid, SharedChemMaster.InputSlotName) == container.Owner ||
+                    _itemSlotsSystem.GetItemOrNull(uid, SharedChemMaster.OutputSlotName) == container.Owner)
+                {
+                    _chemMaster.UpdateUiState((uid, chemMaster));
+                }
+            }
+
+            var query = EntityQueryEnumerator<EnergyReagentDispenserComponent>();
+            while (query.MoveNext(out var uid, out var dispenser))
+            {
+                if (_itemSlotsSystem.GetItemOrNull(uid, SharedEnergyReagentDispenser.OutputSlotName) == container.Owner)
+                    UpdateUiState((uid, dispenser));
+            }
+        }
 
         private void UpdateUiState(Entity<EnergyReagentDispenserComponent> reagentDispenser)
         {
@@ -149,6 +182,7 @@ namespace Content.Goobstation.Server.Chemistry.EntitySystems
                 return new ContainerInfo(Name(container.Value), solution.Volume, solution.MaxVolume)
                 {
                     Reagents = solution.Contents,
+                    SolutionPH = ChemistryPH.GetSolutionPH(solution, _prototypeManager),
                 };
             }
 

@@ -125,6 +125,7 @@
 
 using System.Collections;
 using System.Linq;
+using Content.Shared._Ganimed.Chemistry;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.Reagent;
 using Content.Goobstation.Maths.FixedPoint;
@@ -186,6 +187,10 @@ namespace Content.Shared.Chemistry.Components
         [ViewVariables(VVAccess.ReadWrite)]
         [DataField("temperature")]
         public float Temperature { get; set; } = 293.15f;
+
+        [ViewVariables(VVAccess.ReadWrite)]
+        [DataField("pHOverride")]
+        public float? PHOverride { get; set; }
 
         /// <summary>
         ///     The name of this solution, if it is contained in some <see cref="SolutionContainerManagerComponent"/>
@@ -299,6 +304,7 @@ namespace Content.Shared.Chemistry.Components
             Volume = solution.Volume;
             MaxVolume = solution.MaxVolume;
             Temperature = solution.Temperature;
+            PHOverride = solution.PHOverride;
             CanReact = solution.CanReact;
             _heatCapacity = solution._heatCapacity;
             _heatCapacityDirty = solution._heatCapacityDirty;
@@ -493,6 +499,7 @@ namespace Content.Shared.Chemistry.Components
                 return;
             }
 
+            BlendPHOverrideOnAdd(id, quantity);
             Volume += quantity;
             _heatCapacityDirty |= dirtyHeatCap;
             for (var i = 0; i < Contents.Count; i++)
@@ -701,6 +708,7 @@ namespace Content.Shared.Chemistry.Components
         {
             Contents.Clear();
             Volume = FixedPoint2.Zero;
+            PHOverride = null;
             _heatCapacityDirty = false;
             _heatCapacity = 0;
         }
@@ -971,6 +979,7 @@ namespace Content.Shared.Chemistry.Components
             if (otherSolution.Volume <= FixedPoint2.Zero)
                 return;
 
+            BlendPHOverrideOnAddSolution(otherSolution, protoMan);
             Volume += otherSolution.Volume;
 
             var closeTemps = MathHelper.CloseTo(otherSolution.Temperature, Temperature);
@@ -1043,6 +1052,35 @@ namespace Content.Shared.Chemistry.Components
                 Temperature = _heatCapacity == 0 ? 0 : totalThermalEnergy / _heatCapacity;
 
             ValidateSolution();
+        }
+
+        private void BlendPHOverrideOnAdd(ReagentId id, FixedPoint2 quantity)
+        {
+            if (PHOverride == null || Volume <= FixedPoint2.Zero)
+                return;
+
+            var protoMan = IoCManager.Resolve<IPrototypeManager>();
+            if (!protoMan.TryIndex(id.Prototype, out ReagentPrototype? proto))
+                return;
+
+            PHOverride = ChemistryPH.GetMixedPH(PHOverride.Value, Volume, proto.PH, quantity);
+        }
+
+        private void BlendPHOverrideOnAddSolution(Solution otherSolution, IPrototypeManager? protoMan)
+        {
+            if (PHOverride == null && otherSolution.PHOverride == null)
+                return;
+
+            if (Volume <= FixedPoint2.Zero)
+            {
+                PHOverride = otherSolution.PHOverride;
+                return;
+            }
+
+            protoMan ??= IoCManager.Resolve<IPrototypeManager>();
+            var currentPH = ChemistryPH.GetSolutionPH(this, protoMan);
+            var otherPH = ChemistryPH.GetSolutionPH(otherSolution, protoMan);
+            PHOverride = ChemistryPH.GetMixedPH(currentPH, Volume, otherPH, otherSolution.Volume);
         }
 
         public Color GetColorWithout(IPrototypeManager? protoMan, params string[] without)
