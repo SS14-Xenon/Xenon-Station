@@ -28,21 +28,21 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 - type: entity
+  parent: BaseBullet # Xenon edit
   id: BulletPistol
+  categories: [ HideSpawnMenu ]
   name: bullet (.35 auto)
-  parent: BaseBullet
-  categories: [ HideSpawnMenu ]
   components:
   - type: Projectile
     damage:
       types:
-        Piercing: 16
+        Piercing: 11 # Xenon edit
 
 - type: entity
-  id: BulletPistolPractice
-  name: bullet (.35 auto practice)
   parent: BaseBulletPractice
+  id: BulletPistolPractice
   categories: [ HideSpawnMenu ]
+  name: bullet (.35 auto practice)
   components:
   - type: Projectile
     damage:
@@ -50,25 +50,26 @@
         Blunt: 2
 
 - type: entity
+  parent: [BaseBulletIncendiary, BaseBullet] # Xenon edit
   id: BulletPistolIncendiary
-  parent: BaseBulletIncendiary
-  name: bullet (.35 auto incendiary)
   categories: [ HideSpawnMenu ]
+  name: bullet (.35 auto incendiary)
   components:
   - type: Projectile
     damage:
       types:
-        Blunt: 2
-        Heat: 2
+        Piercing: 9 # Xenon edit
+        # Heat: 4 # Xenon edit
 
 - type: entity
+  parent: [BaseBulletUranium, BaseBullet] # Xenon edit
   id: BulletPistolUranium
-  parent: BaseBulletUranium
-  name: bullet (.35 auto uranium)
   categories: [ HideSpawnMenu ]
+  name: bullet (.35 auto uranium)
   components:
   - type: Projectile
     damage:
       types:
-        Radiation: 6
-        Piercing: 10
+        # Radiation: 6
+        Piercing: 9 # Xenon edit
+      armorPenetration: 0.5 # Xenon edit

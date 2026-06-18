@@ -39,21 +39,21 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 - type: entity
+  parent: BaseBullet # Trauma
   id: BulletMagnum
-  name: bullet (.45 magnum)
-  parent: BaseBullet
   categories: [ HideSpawnMenu ]
+  name: bullet (.45 magnum)
   components:
   - type: Projectile
     damage:
       types:
-        Piercing: 35
+        Piercing: 20 # Xenon edit
 
 - type: entity
-  id: BulletMagnumPractice
-  name: bullet (.45 magnum practice)
   parent: BaseBulletPractice
+  id: BulletMagnumPractice
   categories: [ HideSpawnMenu ]
+  name: bullet (.45 magnum practice)
   components:
   - type: Projectile
     damage:
@@ -61,37 +61,38 @@
         Blunt: 1
 
 - type: entity
+  parent: [BaseBulletIncendiary, BaseBullet] # Trauma
   id: BulletMagnumIncendiary
-  parent: BaseBulletIncendiary
-  name: bullet (.45 magnum incendiary)
   categories: [ HideSpawnMenu ]
+  name: bullet (.45 magnum incendiary)
   components:
   - type: Projectile
     damage:
       types:
-        Blunt: 7
-        Heat: 7
+        Piercing: 17 # Xenon edit
+        # Heat: 9 # Xenon edit
 
 - type: entity
+  parent: [BaseBulletAP, BaseBullet] # Xenon edit
   id: BulletMagnumAP
-  name: bullet (.45 magnum armor-piercing)
-  parent: BaseBullet # Goobstation edit
   categories: [ HideSpawnMenu ]
+  name: bullet (.45 magnum armor-piercing)
   components:
   - type: Projectile
     damage:
       types:
-        Piercing: 28 # Goobstation edit
+        Piercing: 20 # Xenon edit
       armorPenetration: 0.75 # Goobstation
 
 - type: entity
+  parent: [BaseBulletUranium, BaseBullet] # Xenon edit
   id: BulletMagnumUranium
-  name: bullet (.45 magnum uranium)
-  parent: BaseBulletUranium
   categories: [ HideSpawnMenu ]
+  name: bullet (.45 magnum uranium)
   components:
   - type: Projectile
     damage:
       types:
-        Radiation: 15
-        Piercing: 20
+        # Radiation: 15 # Xenon edit
+        Piercing: 17 # Xenon edit
+      armorPenetration: 0.5 # Xenon edit
