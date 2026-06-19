@@ -25,7 +25,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 15
+        Piercing: 10 # Xenon edit
         Structural: 20
 
 - type: entity
@@ -52,8 +52,8 @@
     - type: Projectile
       damage:
         types:
-          Blunt: 6
-          Heat: 6
+          Blunt: 7 # Xenon edit
+       #  Heat: 6 # Xenon edit
     - type: IgnitionSource
       ignited: true
 
@@ -107,8 +107,9 @@
     - type: Projectile
       damage:
         types:
-          Radiation: 8
+        #  Radiation: 8 # Xenon edit
           Piercing: 8
+        armorPenetration: 0.5 # Xenon edit
 
 - type: entity
   id: HighCaliberPelletShotgunUraniumSpread
@@ -134,7 +135,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 65
+        Piercing: 50 # Xenon edit
 
 - type: entity
   id: BulletSlugEnsnaring
