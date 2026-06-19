@@ -470,7 +470,7 @@
   - type: MagazineVisuals
     magState: mag
     steps: 5
-    zeroVisible: false
+    zeroVisible: true
   - type: Appearance
   - type: Clothing
     sprite: Objects/Weapons/Guns/Battery/laser_gun.rsi
@@ -478,8 +478,8 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-  - type: HitscanBatteryAmmoProvider
-    proto: RedLaserPractice
+  - type: ProjectileBatteryAmmoProvider
+    proto: LaserGunBulletPractice # Xenon edit
     fireCost: 62.5
   - type: StaticPrice
     price: 300
@@ -508,18 +508,18 @@
   - type: MagazineVisuals
     magState: mag
     steps: 5
-    zeroVisible: false
+    zeroVisible: true
   - type: Appearance
   - type: Clothing
     sprite: Objects/Weapons/Guns/Battery/laser_gun.rsi
   - type: Gun
-    fireRate: 4 # Goobstation
+    fireRate: 2 # Xenon edit
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-  - type: HitscanBatteryAmmoProvider
-    proto: RedLaser
-    fireCost: 50 # Goobstation
+  - type: ProjectileBatteryAmmoProvider
+    proto: LaserGunBullet # Xenon edit
+    fireCost: 20 # Xenon edit, was 25, 50 shots
   - type: Item
     size: Large
 
@@ -551,8 +551,8 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser3.ogg
-  - type: HitscanBatteryAmmoProvider
-    proto: LightPulse # Goobstation
+  - type: ProjectileBatteryAmmoProvider
+    proto: PulseGunBulletLight # Xenon edit
     fireCost: 200
   - type: Battery
     maxCharge: 2000
@@ -565,8 +565,10 @@
   name: pulse carbine
   parent: [BaseWeaponBattery, BaseGunWieldable, BaseCentcommContraband]
   id: WeaponPulseCarbine
-  description: A state-of-the-art laser carbine that fires a rapidly pulsing beam. Cheaper than its advanced counterpart, though lacks the ability to self-recharge. # Goobstation
+  description: A state-of-the-art pulse carbine, typically used by Nanotrasen militia. # Goobstation
   components:
+  - type: Item
+    size: Large
   - type: Sprite
     sprite: Objects/Weapons/Guns/Battery/pulse_carbine.rsi
     layers:
@@ -586,37 +588,20 @@
     selectedMode: SemiAuto
     fireRate: 3
     availableModes:
-      - SemiAuto
-      - FullAuto
+    - SemiAuto # Xenon - removed FullAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser3.ogg
-  - type: HitscanBatteryAmmoProvider
-    proto: Pulse
+  - type: ProjectileBatteryAmmoProvider
+    proto: PulseGunBullet # Xenon - was Pulse
     fireCost: 200
-  - type: AmmoSelector # Goobstation - Start
-    prototypes:
-    - Pulse
-    - StunPulse
-  - type: UserInterface
-    interfaces:
-      enum.AmmoSelectorUiKey.Key:
-        type: AmmoSelectorMenuBoundUserInterface
-  - type: ActivatableUI
-    altVerb: true
-    verbOnly: true
-    verbText: mode-select-verb-text
-    key: enum.AmmoSelectorUiKey.Key # Goobstation - End
   - type: Battery
     maxCharge: 5000
     startingCharge: 5000
-  # Goobstation
+  # <Goob>
   - type: Tag
     tags:
     - Rifle
-  - type: Item
-    size: Huge
-    shape:
-    - 0,0,4,1
+  # </Goob>
 
 - type: entity
   name: pulse rifle
@@ -624,6 +609,10 @@
   id: WeaponPulseRifle
   description: A weapon almost as infamous as its users. # Goobstation - Sometimes less is more.
   components:
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,5,1 # Goob - 6x2, was 5x2
   - type: Sprite
     sprite: Objects/Weapons/Guns/Battery/pulse_rifle.rsi
     layers:
@@ -643,41 +632,28 @@
     fireRate: 1.5
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser3.ogg
-  - type: HitscanBatteryAmmoProvider
-    proto: HeavyPulse # Goobstation - Start
+  - type: ProjectileBatteryAmmoProvider
+    proto: PulseGunBulletHeavy # Xenon - was Pulse
     fireCost: 100
-  - type: AmmoSelector
-    prototypes:
-    - HeavyPulse
-    - LightPulse
-    - StunPulse
-  - type: UserInterface
-    interfaces:
-      enum.AmmoSelectorUiKey.Key:
-        type: AmmoSelectorMenuBoundUserInterface
-  - type: ActivatableUI
-    altVerb: true
-    verbOnly: true
-    verbText: mode-select-verb-text
-    key: enum.AmmoSelectorUiKey.Key # Goobstation - End
   - type: Battery
     maxCharge: 40000
     startingCharge: 40000
-  # Goobstation
+  # <Goob>
   - type: Tag
     tags:
     - Rifle
-  - type: Item
-    size: Huge
-    shape:
-    - 0,0,5,1
+  # </Goob>
 
 - type: entity
   name: laser cannon
   parent: [BaseWeaponBattery, BaseGunWieldable, BaseSecurityContraband]
   id: WeaponLaserCannon
-  description: A heavy and advanced laser weapon that trades out the capacity of a carbine for greatly increased power. Known to inflict third-degree burns straight through bulletproof armor.
+  description: A heavy duty, high powered laser weapon.
   components:
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,4,1
   - type: Sprite
     sprite: Objects/Weapons/Guns/Battery/laser_cannon.rsi
     layers:
@@ -694,20 +670,16 @@
   - type: Clothing
     sprite: Objects/Weapons/Guns/Battery/laser_cannon.rsi
   - type: Gun
-    fireRate: 2 # Goobstation
+    fireRate: 1.5
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
-  - type: HitscanBatteryAmmoProvider
-    proto: RedHeavyLaser
-    fireCost: 100
+  - type: ProjectileBatteryAmmoProvider
+    proto: LaserCannonBullet # Xenon
+    fireCost: 62.5 # Xenon, was 100
   - type: Tag
     tags:
     - TurretCompatibleWeapon
     - Rifle # Goobstation
-  - type: Item # Goobstation
-    size: Huge
-    shape:
-    - 0,0,4,1
 
 - type: entity
   name: portable particle decelerator
@@ -752,8 +724,12 @@
   name: x-ray cannon
   parent: [BaseWeaponBattery, BaseGunWieldable, BaseSecurityContraband]
   id: WeaponXrayCannon
-  description: An experimental laser weapon that fires a dense x-ray beam. Leaves intense radiation burns.
+  description: An experimental weapon that uses concentrated x-ray energy against its target.
   components:
+  - type: Item
+    size: Huge
+    shape:
+    - 0,0,4,1
   - type: Sprite
     sprite: Objects/Weapons/Guns/Battery/xray.rsi
     layers:
@@ -765,31 +741,21 @@
   - type: Clothing
     sprite: Objects/Weapons/Guns/Battery/xray.rsi
   - type: Gun
+    fireRate: 2
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser3.ogg
-  - type: HitscanBatteryAmmoProvider
-    proto: XrayLaser
-    fireCost: 100
+  - type: ProjectileBatteryAmmoProvider
+    proto: XrayCannonBullet # Xenon
+    fireCost: 62.5 # Xenon, Was 100
   - type: MagazineVisuals
     magState: mag
     steps: 5
     zeroVisible: true
   - type: Appearance
-  - type: RestrictGunshotsByUserTag # Goobstation
-    doesntContain:
-    - Oni
-    messages:
-    - oni-cannot-shoot-guns-1
-    - oni-cannot-shoot-guns-2
-    - oni-cannot-shoot-guns-3
   # Goobstation
   - type: Tag
     tags:
     - Rifle
-  - type: Item
-    size: Huge
-    shape:
-    - 0,0,4,1
 
 - type: entity
   name: practice disabler
@@ -985,8 +951,8 @@
   - type: Gun
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
-  - type: HitscanBatteryAmmoProvider
-    proto: RedMediumLaser
+  - type: ProjectileBatteryAmmoProvider
+    proto: LaserSidearmBullet # Xenon
     fireCost: 100
   - type: BatterySelfRecharger
     autoRecharge: true
@@ -1031,8 +997,8 @@
   - type: Gun
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
-  - type: HitscanBatteryAmmoProvider
-    proto: RedMediumLaser
+  - type: ProjectileBatteryAmmoProvider
+    proto: LaserSidearmBullet # Xenon
     fireCost: 100
   - type: BatterySelfRecharger
     autoRecharge: true
@@ -1169,7 +1135,7 @@
   - type: Clothing
     sprite: Objects/Weapons/Guns/Battery/energy_shotgun.rsi
   - type: Gun
-    fireRate: 2
+    fireRate: 1.25 # Xenon, was 2
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/laser_cannon.ogg
   - type: ProjectileBatteryAmmoProvider
