@@ -4,7 +4,6 @@
   name: blood worm hatchling
   description: A freshly hatched blood worm that desperately seeks blood and a host.
   components:
-
   - type: Sprite
     drawdepth: SmallMobs
     sprite: _Ganimed/Mobs/Aliens/Blood_Worms/blood_worm_hatchling.rsi
@@ -43,10 +42,12 @@
   - type: Speech
     speechVerb: SmallMob
   - type: Emoting
-  - type: LanguageSpeaker
-    languages:
-      GalacticCommon: Understand
-      BloodWorm: Speak
+  - type: LanguageKnowledge
+    speaks:
+    - BloodWorm
+    understands:
+    - Hissing
+    - BloodWorm
   - type: NightVision
   - type: VentCrawler
   - type: CombatMode
