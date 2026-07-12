@@ -9,6 +9,7 @@ using Content.Server.Stunnable;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._Ganimed.BloodWorm;
 using Content.Shared._Ganimed.BloodWorm.Components;
+using Content.Shared._Shitmed.Targeting;
 using Content.Shared._EinsteinEngines.Language.Components;
 using Content.Shared._EinsteinEngines.Silicon.Components;
 using Content.Shared.Actions;
@@ -933,18 +934,18 @@ public sealed class BloodWormSystem : EntitySystem
             return;
 
         var healed = MathF.Min(total, healAmount);
-        var ratio = MathF.Max(0f, (total - healed) / total);
-        var scaled = new DamageSpecifier();
+        var healing = new DamageSpecifier();
 
         foreach (var (type, amount) in damageable.Damage.DamageDict)
         {
             if (amount <= 0)
                 continue;
 
-            scaled.DamageDict[type] = amount * ratio;
+            var healForType = (amount.Float() / total) * healed;
+            healing.DamageDict[type] = -healForType;
         }
 
-        _damageable.SetDamage(uid, damageable, scaled);
+        _damageable.TryChangeDamage(uid, healing, ignoreResistances: true, targetPart: TargetBodyPart.All);
     }
 
     private void PopupToWorm(EntityUid worm, BloodWormComponent comp, string key)
