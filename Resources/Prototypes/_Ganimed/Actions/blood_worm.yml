@@ -1,7 +1,7 @@
 - type: entity
   id: ActionBloodWormLeechHatchling
-  name: action-name-blood-worm-leech
-  description: action-description-blood-worm-leech
+  name: Leech Blood
+  description: Latch onto a target and continuously drain blood until interrupted.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -23,8 +23,6 @@
 
 - type: entity
   id: ActionBloodWormLeechJuvenile
-  name: action-name-blood-worm-leech
-  description: action-description-blood-worm-leech
   categories: [ HideSpawnMenu ]
   parent: ActionBloodWormLeechHatchling
   components:
@@ -36,8 +34,6 @@
 
 - type: entity
   id: ActionBloodWormLeechAdult
-  name: action-name-blood-worm-leech
-  description: action-description-blood-worm-leech
   categories: [ HideSpawnMenu ]
   parent: ActionBloodWormLeechHatchling
   components:
@@ -49,8 +45,8 @@
 
 - type: entity
   id: ActionBloodWormInvade
-  name: action-name-blood-worm-invade
-  description: action-description-blood-worm-invade
+  name: Invade Corpse
+  description: Enter a dead humanoid body and take control.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -70,8 +66,8 @@
 
 - type: entity
   id: ActionBloodWormSpitJuvenile
-  name: action-name-blood-worm-spit
-  description: action-description-blood-worm-spit
+  name: Spit Blood
+  description: Spit caustic blood at a target, spending stored blood.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -89,8 +85,6 @@
 
 - type: entity
   id: ActionBloodWormSpitAdult
-  name: action-name-blood-worm-spit
-  description: action-description-blood-worm-spit
   categories: [ HideSpawnMenu ]
   parent: ActionBloodWormSpitJuvenile
   components:
@@ -102,8 +96,8 @@
 
 - type: entity
   id: ActionBloodWormMature
-  name: action-name-blood-worm-mature
-  description: action-description-blood-worm-mature
+  name: Mature
+  description: Instantly form a cocoon and hatch into the next stage after 30 seconds.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -118,8 +112,8 @@
 
 - type: entity
   id: ActionBloodWormLeaveHost
-  name: action-name-blood-worm-leave-host
-  description: action-description-blood-worm-leave-host
+  name: Leave Host
+  description: Forcefully tear yourself out of the host body.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -136,8 +130,8 @@
 
 - type: entity
   id: ActionBloodWormInject
-  name: action-name-blood-worm-heal-host
-  description: action-description-blood-worm-heal-host
+  name: Heal Host
+  description: Spend absorbed blood to heal the host body for 65 damage.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
@@ -156,8 +150,8 @@
 
 - type: entity
   id: ActionBloodWormReviveHost
-  name: action-name-blood-worm-revive-host
-  description: action-description-blood-worm-revive-host
+  name: Revive Host
+  description: Return the host body to life and restore up to 150 total damage.
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
