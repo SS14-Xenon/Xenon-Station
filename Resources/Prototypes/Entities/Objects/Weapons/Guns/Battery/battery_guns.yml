@@ -393,7 +393,7 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: LaserGunBulletPractice # Xenon edit
     fireCost: 62.5
   - type: StaticPrice
@@ -402,7 +402,6 @@
   # Goobstation
   - type: Item
     size: Large
-
 
 - type: entity
   name: laser carbine # Goobstation
@@ -437,19 +436,6 @@
     fireCost: 20 # Xenon edit, was 25, 50 shots
   - type: Item
     size: Large
-
-- type: entity
-  name: practice laser carbine
-  parent: [BaseLaserRifle, BaseGunWieldable]
-  id: WeaponLaserCarbinePractice
-  description: This modified laser carbine fires nearly harmless beams in the 40-watt range, for target practice.
-  components:
-  - type: StaticPrice
-    price: 300
-  - type: BatteryAmmoProvider
-    proto: RedLaserPractice
-    fireCost: 62.5
-  - type: PacifismAllowedGun
 
 - type: entity
   name: pulse pistol
