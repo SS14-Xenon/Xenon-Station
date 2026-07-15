@@ -45,6 +45,31 @@ namespace Content.Server.VendingMachines
             SubscribeLocalEvent<VendingMachineComponent, VendingMachineSelfDispenseEvent>(OnSelfDispense);
 
             SubscribeLocalEvent<VendingMachineRestockComponent, PriceCalculationEvent>(OnPriceCalculation);
+
+            Subs.BuiEvents<VendingMachineComponent>(VendingMachineUiKey.Key, subs =>
+            {
+                subs.Event<VendingMachineRequestUpdateMessage>(OnVendingRequestUpdateMessage);
+            });
+        }
+
+        private void OnVendingRequestUpdateMessage(Entity<VendingMachineComponent> entity, ref VendingMachineRequestUpdateMessage args)
+        {
+            if (args.Actor is not { Valid: true } actor)
+                return;
+
+            var inventory = GetAllInventory(entity.Owner, entity.Comp);
+            var playerBalance = GetPlayerBalance(actor);
+            var state = new VendingMachineUpdateState(inventory, entity.Comp.PriceMultiplier, entity.Comp.Credits, entity.Comp.AllForFree, playerBalance: playerBalance);
+            UISystem.SetUiState(entity.Owner, VendingMachineUiKey.Key, state);
+        }
+
+        private int GetPlayerBalance(EntityUid sender)
+        {
+            if (!_idCardSystem.TryFindIdCard(sender, out var idCard))
+                return 0;
+            if (!TryComp<BankCardComponent>(idCard.Owner, out var bankCard) || bankCard.AccountId == null)
+                return 0;
+            return _bankCard.GetBalance(bankCard.AccountId.Value);
         }
 
         private void OnVendingPrice(EntityUid uid, VendingMachineComponent component, ref PriceCalculationEvent args)
@@ -296,6 +321,17 @@ namespace Content.Server.VendingMachines
             UISystem.SetUiState(entity.Owner, VendingMachineUiKey.Key, state);
         }
 
+        private void UpdateUIWithBalance(Entity<VendingMachineComponent?> entity, EntityUid user)
+        {
+            if (!Resolve(entity, ref entity.Comp))
+                return;
+
+            var inventory = GetAllInventory(entity.Owner, entity.Comp);
+            var playerBalance = GetPlayerBalance(user);
+            var state = new VendingMachineUpdateState(inventory, entity.Comp.PriceMultiplier, entity.Comp.Credits, entity.Comp.AllForFree, playerBalance: playerBalance);
+            UISystem.SetUiState(entity.Owner, VendingMachineUiKey.Key, state);
+        }
+
         // ADT-Economy: Override to handle bank payment
         protected override void TryChargeAndVend(EntityUid uid, EntityUid sender, VendingMachineInventoryEntry entry, int count, VendingMachineComponent component)
         {
@@ -312,25 +348,28 @@ namespace Content.Server.VendingMachines
                 return;
             }
 
+            // Play sound for paid items from server only (no client prediction)
+            var emitSound = component.SoundVend;
+
             // Find the player's bank account via their ID card
             if (!_idCardSystem.TryFindIdCard(sender, out var idCard))
             {
                 _popup.PopupEntity(Loc.GetString("vending-machine-no-id-card"), uid, sender, PopupType.Medium);
-                Deny((uid, component), sender);
+                Deny((uid, component));
                 return;
             }
 
             if (!TryComp<BankCardComponent>(idCard.Owner, out var bankCard))
             {
                 _popup.PopupEntity(Loc.GetString("vending-machine-no-bank-card"), uid, sender, PopupType.Medium);
-                Deny((uid, component), sender);
+                Deny((uid, component));
                 return;
             }
 
             if (bankCard.AccountId == null)
             {
                 _popup.PopupEntity(Loc.GetString("vending-machine-no-bank-account"), uid, sender, PopupType.Medium);
-                Deny((uid, component), sender);
+                Deny((uid, component));
                 return;
             }
 
@@ -338,7 +377,7 @@ namespace Content.Server.VendingMachines
             if (!_bankCard.TryChangeBalance(bankCard.AccountId.Value, -totalPrice))
             {
                 _popup.PopupEntity(Loc.GetString("vending-machine-insufficient-funds"), uid, sender, PopupType.Medium);
-                Deny((uid, component), sender);
+                Deny((uid, component));
                 return;
             }
 
@@ -346,11 +385,18 @@ namespace Content.Server.VendingMachines
             component.Credits += totalPrice;
             Dirty(uid, component);
 
-            // Vend the item(s)
+            // Vend the item(s) - suppress predicted sound since there's no client prediction
             for (int i = 0; i < count; i++)
             {
-                AuthorizedVend(uid, sender, entry.Type, entry.ID, component);
+                AuthorizedVend(uid, sender, entry.Type, entry.ID, component, playSound: false);
             }
+
+            // Play sound for all players (including the user who didn't predict)
+            if (emitSound != null)
+                Audio.PlayPvs(emitSound, uid);
+
+            // Update UI with the player's new balance
+            UpdateUIWithBalance((uid, component), sender);
         }
     }
 }

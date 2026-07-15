@@ -69,6 +69,7 @@ public sealed class ATMSystem : SharedATMSystem
 
         if (_random.Prob(component.ErrorChance))
         {
+            args.Handled = true;
             Del(args.Used);
             _stackSystem.SpawnAtPosition(amount, _prototypeManager.Index<StackPrototype>(component.CreditStackPrototype), Transform(uid).Coordinates);
             _audioSystem.PlayPvs(component.SoundWithdrawCurrency, uid);
@@ -76,6 +77,7 @@ public sealed class ATMSystem : SharedATMSystem
             return;
         }
 
+        args.Handled = true;
         _bankCardSystem.TryChangeBalance(bankCard.AccountId!.Value, amount);
         Del(args.Used);
 

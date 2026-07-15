@@ -18,6 +18,8 @@ namespace Content.Client.VendingMachines
         [ViewVariables]
         private List<VendingMachineInventoryEntry> _cachedInventory = new();
 
+        private int _lastPlayerBalance;
+
         public VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
         {
         }
@@ -35,7 +37,7 @@ namespace Content.Client.VendingMachines
             _menu.OnClose += Close;
             _menu.OnItemSelected += OnItemSelected;
             _menu.OnWithdraw += () => SendMessage(new VendingMachineWithdrawMessage());
-            _menu.Populate(Owner, _cachedInventory, component.PriceMultiplier, component.Credits);
+            _menu.Populate(Owner, _cachedInventory, component.PriceMultiplier, component.Credits, 0);
             SendMessage(new VendingMachineRequestUpdateMessage());
 
             _menu.OpenCentered();
@@ -50,12 +52,18 @@ namespace Content.Client.VendingMachines
 
             var system = EntMan.System<VendingMachineSystem>();
             _cachedInventory = system.GetAllInventory(Owner);
-            _menu.Populate(Owner, _cachedInventory, newState.PriceMultiplier, newState.Credits);
+            _lastPlayerBalance = newState.PlayerBalance;
+            _menu.Populate(Owner, _cachedInventory, newState.PriceMultiplier, newState.Credits, newState.PlayerBalance);
         }
 
         private void OnItemSelected(VendingMachineInventoryEntry entry)
         {
-            SendMessage(new VendingMachineEjectCountMessage(entry, 1));
+            // Free items can be predicted (no server validation needed)
+            // Paid items are not predicted to avoid rollback on insufficient funds
+            if (entry.Price <= 0)
+                SendPredictedMessage(new VendingMachineEjectCountMessage(entry, 1));
+            else
+                SendMessage(new VendingMachineEjectCountMessage(entry, 1));
         }
 
         public void Refresh()
@@ -65,7 +73,7 @@ namespace Content.Client.VendingMachines
             var system = EntMan.System<VendingMachineSystem>();
             _cachedInventory = system.GetAllInventory(Owner);
 
-            _menu?.Populate(Owner, _cachedInventory, bendy?.PriceMultiplier ?? 1, bendy?.Credits ?? 0);
+            _menu?.Populate(Owner, _cachedInventory, bendy?.PriceMultiplier ?? 1, bendy?.Credits ?? 0, _lastPlayerBalance);
         }
 
         public void UpdateAmounts()
@@ -74,7 +82,7 @@ namespace Content.Client.VendingMachines
 
             var system = EntMan.System<VendingMachineSystem>();
             _cachedInventory = system.GetAllInventory(Owner);
-            _menu?.Populate(Owner, _cachedInventory, bendy?.PriceMultiplier ?? 1, bendy?.Credits ?? 0);
+            _menu?.Populate(Owner, _cachedInventory, bendy?.PriceMultiplier ?? 1, bendy?.Credits ?? 0, _lastPlayerBalance);
         }
 
         protected override void Dispose(bool disposing)

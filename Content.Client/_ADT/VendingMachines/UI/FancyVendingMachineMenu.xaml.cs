@@ -65,7 +65,7 @@ public sealed partial class FancyVendingMachineMenu : FancyWindow
         return data.Name.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }
 
-    public void Populate(EntityUid entityUid, List<VendingMachineInventoryEntry> inventory, double priceMultiplier, int credits)
+    public void Populate(EntityUid entityUid, List<VendingMachineInventoryEntry> inventory, double priceMultiplier, int credits, int playerBalance = 0)
     {
         _cachedItems.Clear();
         _priceMultiplier = priceMultiplier;
@@ -78,7 +78,7 @@ public sealed partial class FancyVendingMachineMenu : FancyWindow
             ButtonDisabledColor = comp.UiButtonDisabledColor;
         }
 
-        CreditsLabel.Text = Loc.GetString("vending-ui-credits-amount", ("credits", credits));
+        CreditsLabel.Text = Loc.GetString("vending-ui-credits-amount", ("credits", playerBalance));
         WithdrawButton.Disabled = credits == 0;
 
         if (inventory.Count == 0 && VendingContents.Visible)

@@ -247,7 +247,7 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
     /// <param name="itemId">The prototype ID of the item</param>
     /// <param name="throwItem">Whether the item should be thrown in a random direction after ejection</param>
     /// <param name="vendComponent"></param>
-    public void TryEjectVendorItem(EntityUid uid, InventoryType type, string itemId, bool throwItem, EntityUid? user = null, VendingMachineComponent? vendComponent = null)
+    public void TryEjectVendorItem(EntityUid uid, InventoryType type, string itemId, bool throwItem, EntityUid? user = null, VendingMachineComponent? vendComponent = null, bool playSound = true)
     {
         if (!Resolve(uid, ref vendComponent))
             return;
@@ -285,7 +285,8 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
         Dirty(uid, vendComponent);
         UpdateUI((uid, vendComponent));
         TryUpdateVisualState((uid, vendComponent));
-        Audio.PlayPredicted(vendComponent.SoundVend, uid, user);
+        if (playSound)
+            Audio.PlayPredicted(vendComponent.SoundVend, uid, user);
     }
 
     public void Deny(Entity<VendingMachineComponent?> entity, EntityUid? user = null)
@@ -348,11 +349,11 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
     /// <param name="type">The type of inventory the item is from</param>
     /// <param name="itemId">The prototype ID of the item</param>
     /// <param name="component"></param>
-    public void AuthorizedVend(EntityUid uid, EntityUid sender, InventoryType type, string itemId, VendingMachineComponent component)
+    public void AuthorizedVend(EntityUid uid, EntityUid sender, InventoryType type, string itemId, VendingMachineComponent component, bool playSound = true)
     {
         if (IsAuthorized(uid, sender, component))
         {
-            TryEjectVendorItem(uid, type, itemId, component.CanShoot, sender, component);
+            TryEjectVendorItem(uid, type, itemId, component.CanShoot, sender, component, playSound);
         }
     }
 
