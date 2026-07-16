@@ -1,1 +1,1 @@
-washing-machine-start = start washing machine
+washing-machine-start = Start washing machine
