@@ -40,7 +40,6 @@ using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
 using Content.Goobstation.Common.CCVar; // Goob Station - Barks
 using Content.Goobstation.Common.Barks; // Goob Station - Barks
-using Content.Client.ADT.UserInterface.Controls;
 using Content.Client.ADT.CharecterFlavor;
 using Content.Shared.ADT.CharecterFlavor;
 
