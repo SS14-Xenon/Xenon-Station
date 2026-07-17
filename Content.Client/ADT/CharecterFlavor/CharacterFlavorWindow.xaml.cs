@@ -41,13 +41,6 @@ public sealed partial class CharacterFlavorWindow : FancyWindow
         if (!_entityManager.TryGetComponent<MetaDataComponent>(uid, out var metaData))
             return;
 
-        if (_entityManager.TryGetComponent<HumanoidAppearanceComponent>(_charecter, out var humanoid)
-        && _proto.Index(humanoid.Species).ShortDesc != string.Empty)
-        {
-            CustomSpeciesLabel.Text = Loc.GetString(_proto.Index(humanoid.Species).ShortDesc);
-            CustomSpeciesTitle.Text = Loc.GetString("flavor-interface-custom-species");
-        }
-
         if (flavor.HeadshotUrl != string.Empty)
         {
             HeadshotImage.TexturePath = "/Textures/ADT/Interface/headshot-loading.png";

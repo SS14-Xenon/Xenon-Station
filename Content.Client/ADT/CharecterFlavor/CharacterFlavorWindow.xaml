@@ -131,32 +131,6 @@
                         </ScrollContainer>
                     </BoxContainer>
                 </PanelContainer>
-
-                <!-- CUSTOM SPECIES -->
-                <PanelContainer HorizontalExpand="True" VerticalExpand="True" SizeFlagsStretchRatio="1" >
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#1a1a1a"/>
-                    </PanelContainer.PanelOverride>
-
-                    <BoxContainer Orientation="Vertical" Margin="8" SetWidth="250">
-                        <ui:Label Name="CustomSpeciesTitle"
-                                  Text="{Loc 'flavor-interface-no-custom-species'}"
-                                  StyleClasses="LabelHeading"
-                                  Margin="8 0"/>
-
-                        <ScrollContainer VerticalExpand="True"
-                                         HorizontalExpand="True"
-                                         VScrollEnabled="True"
-                                         HScrollEnabled="False">
-                            <ui:RichTextLabel Name="CustomSpeciesLabel"
-                                              Text="{Loc 'flavor-interface-no-custom-species-desc'}"
-                                              HorizontalExpand="True"
-                                              VerticalAlignment="Top"
-                                              HorizontalAlignment="Left"
-                                              Margin="8"/>
-                        </ScrollContainer>
-                    </BoxContainer>
-                </PanelContainer>
             </BoxContainer>
         </BoxContainer>
 </controls:FancyWindow>

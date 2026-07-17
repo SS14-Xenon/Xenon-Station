@@ -289,7 +289,7 @@ namespace Content.Server.Database
                 antags.ToHashSet(),
                 traits.ToHashSet(),
                 loadouts,
-                barkVoice // Goob Station - Barks
+                barkVoice, // Goob Station - Barks
                 // ADT start
                 profile.OOCNotes,
                 profile.HeadshotUrl

@@ -714,7 +714,7 @@ namespace Content.Shared.Preferences
             // end Goobstation: port EE height/width sliders
 
             var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex);
-            
+
             //ADT-tweak-start
             string oocNotes = OOCNotes; // Initialize with the property value
             if (oocNotes.Length > maxFlavorTextLength)
@@ -733,8 +733,6 @@ namespace Content.Shared.Preferences
             }
             //максимальная длина ООЦ заметок не больше чем длина флавора
             //ADT-tweak-end
-
-            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex, sponsorPrototypes);
 
             var prefsUnavailableMode = PreferenceUnavailable switch
             {
