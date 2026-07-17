@@ -81,7 +81,7 @@ namespace Content.Server._Funkystation.ReagentFires.Systems
             {
                 if (HasComp<ReagentPuddleFireComponent>(containerUid))
                 {
-                    Extinguish(containerUid);
+                    _toExtinguish.Add(containerUid);
                 }
                 return;
             }
@@ -239,7 +239,6 @@ namespace Content.Server._Funkystation.ReagentFires.Systems
         public override void Update(float frameTime)
         {
             base.Update(frameTime);
-            _toExtinguish.Clear();
 
             var activeQuery = EntityQueryEnumerator<ReagentPuddleFireComponent, PuddleComponent, TransformComponent>();
             while (activeQuery.MoveNext(out var uid, out var fireComp, out var puddle, out var xform))
@@ -455,6 +454,7 @@ namespace Content.Server._Funkystation.ReagentFires.Systems
             {
                 Extinguish(uid);
             }
+            _toExtinguish.Clear();
         }
     }
 }
