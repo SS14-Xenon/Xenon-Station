@@ -42,7 +42,7 @@ public sealed partial class CharacterFlavorWindow : FancyWindow
 
         if (flavor.HeadshotUrl != string.Empty)
         {
-            HeadshotImage.TexturePath = "/Textures/ADT/Interface/headshot-loading.png";
+            HeadshotImage.TexturePath = "/Textures/_White/Interface/headshot-loading.png";
             HeadshotLoadingLabel.Visible = true;
             HeadshotContainer.Visible = true;
         }
