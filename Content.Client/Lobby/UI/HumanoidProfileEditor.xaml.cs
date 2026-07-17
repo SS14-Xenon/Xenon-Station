@@ -3,6 +3,9 @@
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
+using Content.Client.Guidebook;
+using System.Reflection;
 using Content.Client.Humanoid;
 using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;

@@ -1,6 +1,0 @@
-- type: guideEntry
-  id: FlavorTextRules
-  name: Правила описания персонажа
-  priority: 0
-  ruleEntry: true
-  text: "/ServerInfo/ADT/Guidebook/ServerRules/FlavorTextRules.xml"
