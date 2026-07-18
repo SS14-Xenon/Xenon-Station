@@ -2,7 +2,7 @@ using Robust.Shared.Configuration;
 using Content.Shared.Atmos;
 using Robust.Shared;
 
-namespace Content.Shared.ADT.CCVar;
+namespace Content.Shared._ADT.CCVar;
 
 [CVarDefs]
 public sealed class ADTCCVars

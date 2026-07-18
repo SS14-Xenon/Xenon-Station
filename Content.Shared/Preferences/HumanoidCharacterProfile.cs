@@ -51,8 +51,8 @@
 
 using System.Linq;
 using System.Text.RegularExpressions;
-using Content.Shared.ADT.CCVar;
-using Content.Shared.ADT.CharecterFlavor;
+using Content.Shared._ADT.CCVar;
+using Content.Shared._ADT.CharecterFlavor;
 using Content.Shared.CCVar;
 using Content.Shared.Dataset;
 using Content.Shared.GameTicking;

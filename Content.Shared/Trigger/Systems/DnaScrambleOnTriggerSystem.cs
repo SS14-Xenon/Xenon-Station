@@ -1,4 +1,4 @@
-using Content.Shared.ADT.CharecterFlavor; // ADT-Flavor
+using Content.Shared._ADT.CharecterFlavor; // ADT-Flavor
 using Content.Shared.DetailExaminable;
 using Content.Shared.Forensics.Systems;
 using Content.Shared.Humanoid;

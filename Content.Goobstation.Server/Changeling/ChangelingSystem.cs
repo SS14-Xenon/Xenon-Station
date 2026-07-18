@@ -38,7 +38,7 @@ using Content.Server.Store.Systems;
 using Content.Server.Stunnable;
 using Content.Server.Zombies;
 using Content.Shared._Goobstation.Weapons.AmmoSelector;
-using Content.Shared.ADT.CharecterFlavor; // ADT-Flavor
+using Content.Shared._ADT.CharecterFlavor; // ADT-Flavor
 using Content.Shared.Actions;
 using Content.Shared.Alert;
 using Content.Shared.Camera;

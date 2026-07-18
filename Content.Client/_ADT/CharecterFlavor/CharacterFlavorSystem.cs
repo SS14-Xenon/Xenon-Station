@@ -1,11 +1,11 @@
 // Inspired by Nyanotrasen
 using System.Collections.Concurrent;
 using System.Linq;
-using Content.Shared.ADT.CharecterFlavor;
+using Content.Shared._ADT.CharecterFlavor;
 using Robust.Client.UserInterface;
 using Robust.Shared.Timing;
 
-namespace Content.Client.ADT.CharecterFlavor;
+namespace Content.Client._ADT.CharecterFlavor;
 
 public sealed class CharecterFlavorSystem : SharedCharecterFlavorSystem
 {

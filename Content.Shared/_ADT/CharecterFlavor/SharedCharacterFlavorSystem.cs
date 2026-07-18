@@ -5,7 +5,7 @@ using Content.Shared.Verbs;
 using Robust.Shared.Configuration;
 using Robust.Shared.Utility;
 
-namespace Content.Shared.ADT.CharecterFlavor;
+namespace Content.Shared._ADT.CharecterFlavor;
 
 public abstract class SharedCharecterFlavorSystem : EntitySystem
 {

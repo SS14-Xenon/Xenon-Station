@@ -1,11 +1,11 @@
-using Content.Shared.ADT.CharecterFlavor;
+using Content.Shared._ADT.CharecterFlavor;
 using Robust.Client.UserInterface;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.GameStates;
 using Content.Client.Gameplay;
 
-namespace Content.Client.ADT.CharecterFlavor;
+namespace Content.Client._ADT.CharecterFlavor;
 
 [UsedImplicitly]
 public sealed class CharacterFlavorUiController : UIController, IOnStateEntered<GameplayState>

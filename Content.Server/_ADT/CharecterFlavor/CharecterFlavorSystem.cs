@@ -5,14 +5,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Content.Shared.ADT.CCVar;
-using Content.Shared.ADT.CharecterFlavor;
+using Content.Shared._ADT.CCVar;
+using Content.Shared._ADT.CharecterFlavor;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
-namespace Content.Server.ADT.CharecterFlavor;
+namespace Content.Server._ADT.CharecterFlavor;
 
 public sealed class CharecterFlavorSystem : SharedCharecterFlavorSystem
 {
