@@ -1,4 +1,5 @@
 flavor-interface-lable = Детальный осмотр персонажа
+flavor-interface-equipment = Экипировка
 flavor-interface-headshot = Хэдшот
 flavor-interface-headshot-url = Ссылка на хэдшот арт
 flavor-interface-headshot-url-desc = Для получения ссылки можно использовать изображения с сайта https://ru.pinterest.com/. 

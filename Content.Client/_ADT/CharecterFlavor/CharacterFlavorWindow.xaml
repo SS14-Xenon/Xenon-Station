@@ -12,7 +12,7 @@
                       HorizontalExpand="True"
                       VerticalExpand="True">
 
-            <!-- Заголовок -->
+            <!-- Title -->
             <BoxContainer Orientation="Horizontal" Margin="0 0 0 10">
                     <ui:RichTextLabel Name="LabelName"
                           Text="{Loc 'flavor-interface-lable'}"
@@ -20,37 +20,65 @@
                           Margin="8"/>
             </BoxContainer>
 
-            <!-- ВЕРХНИЙ РЯД -->
+            <!-- Main content -->
             <BoxContainer Orientation="Horizontal"
                           HorizontalExpand="True"
-
-                          SetHeight="300"
+                          VerticalExpand="True"
                           SeparationOverride="10">
 
-                <!-- Headshot-->
-                <PanelContainer VerticalExpand="True" SetWidth="275" Name="HeadshotContainer" >
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#1a1a1a"/>
-                    </PanelContainer.PanelOverride>
+                <!-- Left column: Sprite View + Headshot -->
+                <BoxContainer Orientation="Vertical"
+                              SetWidth="275"
+                              SeparationOverride="10"
+                              VerticalExpand="True">
 
-                    <BoxContainer Orientation="Vertical" Margin="8">
-                        <ui:Label Text="{Loc 'flavor-interface-headshot'}"
-                                  HorizontalAlignment="Center"
-                                  StyleClasses="LabelHeading"
-                                  Margin="5 0 5 5"/>
+                    <!-- Equipment list -->
+                    <PanelContainer VerticalExpand="True">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#1a1a1a"/>
+                        </PanelContainer.PanelOverride>
 
-                        <TextureRect Name="HeadshotImage"
-                                    SetSize="250 250"
-                                    MaxSize="250 250"
-                                    Stretch="KeepAspectCentered">
-                            <RichTextLabel Name="HeadshotLoadingLabel"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-                        </TextureRect>
-                    </BoxContainer>
-                </PanelContainer>
+                        <BoxContainer Orientation="Vertical" Margin="8">
+                            <ui:Label Text="{Loc 'flavor-interface-equipment'}"
+                                      HorizontalAlignment="Center"
+                                      StyleClasses="LabelHeading"
+                                      Margin="5 0 5 5"/>
 
-                <!-- FLAVOR TEXT -->
+                            <ScrollContainer VerticalExpand="True"
+                                             HScrollEnabled="False">
+                                <BoxContainer Name="ItemsContainer"
+                                              Orientation="Vertical"
+                                              VerticalExpand="True"
+                                              SeparationOverride="4"/>
+                            </ScrollContainer>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <!-- Headshot -->
+                    <PanelContainer Name="HeadshotContainer">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#1a1a1a"/>
+                        </PanelContainer.PanelOverride>
+
+                        <BoxContainer Orientation="Vertical" Margin="8">
+                            <ui:Label Text="{Loc 'flavor-interface-headshot'}"
+                                      HorizontalAlignment="Center"
+                                      StyleClasses="LabelHeading"
+                                      Margin="5 0 5 5"/>
+
+                            <TextureRect Name="HeadshotImage"
+                                        SetSize="250 250"
+                                        MaxSize="250 250"
+                                        Stretch="KeepAspectCentered">
+                                <RichTextLabel Name="HeadshotLoadingLabel"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                            </TextureRect>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+
+                <!-- Right column: Flavor Text -->
                 <PanelContainer VerticalExpand="True" HorizontalExpand="True">
                     <PanelContainer.PanelOverride>
                         <gfx:StyleBoxFlat BackgroundColor="#1a1a1a"/>
@@ -73,14 +101,6 @@
                         </ScrollContainer>
                     </BoxContainer>
                 </PanelContainer>
-            </BoxContainer>
-
-            <!-- НИЖНИЙ РЯД -->
-            <BoxContainer Orientation="Horizontal"
-                          HorizontalExpand="True"
-                          VerticalExpand="True"
-                          SeparationOverride="10"
-                          Margin="0 10 0 0">
             </BoxContainer>
         </BoxContainer>
 </controls:FancyWindow>
