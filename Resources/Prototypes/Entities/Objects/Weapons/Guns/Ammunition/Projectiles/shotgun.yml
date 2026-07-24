@@ -44,6 +44,8 @@
       types:
         Piercing: 7 # Xenon edit, was 10
         Structural: 15
+      woundSeverityMultipliers:
+        Piercing: 1.5 # Minced Meat
 
 - type: entity
   parent: PelletShotgun
@@ -232,6 +234,8 @@
       types:
         Piercing: 25
         Structural: 5
+      woundSeverityMultipliers:
+        Piercing: 3 # holy peak
 
 - type: entity
   parent: PelletGrapeshot
@@ -261,6 +265,8 @@
     damage:
       types:
         Slash: 25
+      woundSeverityMultipliers:
+        Slash: 3 # Holy Peak
 
 - type: entity
   parent: PelletGlass
