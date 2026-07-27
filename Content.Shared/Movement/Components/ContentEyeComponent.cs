@@ -9,7 +9,10 @@ namespace Content.Shared.Movement.Components;
 /// <summary>
 /// Holds SS14 eye data not relevant for engine, e.g. lerp targets.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(SharedContentEyeSystem))]
+// ES START
+// STOP adding ACCESS to shit for NO REASON
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+// ES END
 public sealed partial class ContentEyeComponent : Component
 {
     /// <summary>

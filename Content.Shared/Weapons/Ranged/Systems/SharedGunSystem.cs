@@ -3,6 +3,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Shared._Shitmed.Weapons.Ranged.Events; // Shitmed Change
+using Content.Shared._ES.Camera;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
@@ -72,6 +73,9 @@ public abstract partial class SharedGunSystem : EntitySystem
     [Dependency] protected readonly SharedTransformSystem TransformSystem = default!;
     [Dependency] protected readonly TagSystem TagSystem = default!;
     [Dependency] protected readonly ThrowingSystem ThrowingSystem = default!;
+    // ES START
+    [Dependency] private ESScreenshakeSystem _shake = default!;
+    // ES END
 
     /// <summary>
     /// Default projectile speed
@@ -475,6 +479,12 @@ public abstract partial class SharedGunSystem : EntitySystem
         RaiseLocalEvent(gun, ref shotEv);
         var shotBodyEv = new GunShotBodyEvent(gun, gun); // Shitmed Change
         RaiseLocalEvent(user, shotBodyEv); // Shitmed Change
+
+        // ES START
+        // this is a suspicious place to do this but whatever.
+        var gunShakeRotation = new ESScreenshakeParameters() { Trauma = 0.085f * gun.Comp.CameraRecoilScalarModified, DecayRate = 1.2f, Frequency = 0.008f};
+        _shake.Screenshake(user, null, gunShakeRotation);
+        // ES END
 
         if (!userImpulse || !TryComp<PhysicsComponent>(user, out var userPhysics))
             return true;

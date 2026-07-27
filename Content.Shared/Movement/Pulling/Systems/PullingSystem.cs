@@ -3,6 +3,7 @@
 using Content.Goobstation.Common.Grab;
 using Content.Shared._Shitcode.Heretic.Components;
 using Content.Shared.ActionBlocker;
+using Content.Shared._ST.Interaction; // Stellar - interaction particles
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
@@ -592,7 +593,7 @@ public sealed class PullingSystem : EntitySystem
 
         // Pulling confirmed
 
-        _interaction.DoContactInteraction(pullableUid, pullerUid);
+        _interaction.DoContactInteraction(pullerUid, pullableUid,null, true, interactionParticleType: StellarInteractionParticleType.Pull); // Stellar - Interaction particles
 
         // Use net entity so it's consistent across client and server.
         pullableComp.PullJointId = $"pull-joint-{GetNetEntity(pullableUid)}";
