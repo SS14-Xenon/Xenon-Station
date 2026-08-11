@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 
 using Robust.Shared.Serialization;
 
@@ -15,4 +15,7 @@ public sealed partial class DisplacementData
 
     [DataField]
     public string? ShaderOverride = "DisplacedDraw";
+
+    [DataField]
+    public string ShaderOverrideUnshaded = "DisplacedDrawUnshaded";
 }

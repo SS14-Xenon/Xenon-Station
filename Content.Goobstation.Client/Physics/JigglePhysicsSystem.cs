@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+using System.Numerics; // Xenon-tweak
 using Content.Client.DisplacementMap;
 using Content.Shared.Camera;
 using Content.Shared.DisplacementMap;
 using Content.Trauma.Shared.Physics;
+using Robust.Client.GameObjects; // Xenon-tweak
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Reflection;
 
@@ -17,13 +19,26 @@ public sealed partial class JigglePhysicsSystem : EntitySystem
     [Dependency] private DisplacementMapSystem _displacement = default!;
     [Dependency] private IReflectionManager _reflection = default!;
     [Dependency] private SpriteSystem _sprite = default!;
-    [Dependency] private EntityQuery<CameraRecoilComponent> _recoilQuery = default!;
-    [Dependency] private EntityQuery<JigglePhysicsVisualsComponent> _visualsQuery = default!;
-    [Dependency] private EntityQuery<SpriteComponent> _spriteQuery = default!;
+
+    private EntityQuery<CameraRecoilComponent> _recoilQuery = default!; // Xenon-tweak
+    private EntityQuery<JigglePhysicsVisualsComponent> _visualsQuery = default!; // Xenon-tweak
+    private EntityQuery<SpriteComponent> _spriteQuery = default!; // Xenon-tweak
 
     private DisplacementData _data = new();
 
-    [SubscribeLocalEvent]
+    // Xenon-tweak start
+    public override void Initialize()
+    {
+        base.Initialize();
+        _recoilQuery = GetEntityQuery<CameraRecoilComponent>();
+        _visualsQuery = GetEntityQuery<JigglePhysicsVisualsComponent>();
+        _spriteQuery = GetEntityQuery<SpriteComponent>();
+        SubscribeLocalEvent<JigglePhysicsComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<JigglePhysicsComponent, AfterAutoHandleStateEvent>(OnAutoHandleState);
+        SubscribeLocalEvent<JigglePhysicsComponent, ComponentRemove>(OnRemove);
+    }
+    // Xenon-tweak end
+
     private void OnStartup(Entity<JigglePhysicsComponent> ent, ref ComponentStartup args)
     {
         if (!_spriteQuery.TryComp(ent, out var sprite))
@@ -59,7 +74,6 @@ public sealed partial class JigglePhysicsSystem : EntitySystem
         }
     }
 
-    [SubscribeLocalEvent]
     private void OnAutoHandleState(Entity<JigglePhysicsComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         if (!_visualsQuery.TryComp(ent, out var vis))
@@ -71,7 +85,6 @@ public sealed partial class JigglePhysicsSystem : EntitySystem
         }
     }
 
-    [SubscribeLocalEvent]
     private void OnRemove(Entity<JigglePhysicsComponent> ent, ref ComponentRemove args)
     {
         if (TerminatingOrDeleted(ent))
@@ -82,10 +95,9 @@ public sealed partial class JigglePhysicsSystem : EntitySystem
         if (!_spriteQuery.TryComp(ent, out var sprite))
             return;
 
-        var spriteEnt = new Entity<SpriteComponent>(ent, sprite);
         foreach (var key in ent.Comp.Layers)
         {
-            _displacement.EnsureDisplacementIsNotOnSprite(spriteEnt, key);
+            _sprite.RemoveLayer((ent, sprite), $"{key}-displacement", false); // Xenon-tweak
         }
     }
 
@@ -94,9 +106,9 @@ public sealed partial class JigglePhysicsSystem : EntitySystem
         base.FrameUpdate(dt);
 
         var query = EntityQueryEnumerator<JigglePhysicsComponent, JigglePhysicsVisualsComponent, PhysicsComponent>();
-        foreach (var quiet in query)
+        while (query.MoveNext(out var uid, out var comp, out var vis, out var phys)) // Xenon-tweak
         {
-            Jiggle(quiet, dt);
+            Jiggle((uid, comp, vis, phys), dt); // Xenon-tweak
         }
     }
 

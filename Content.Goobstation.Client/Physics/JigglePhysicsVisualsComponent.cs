@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
+using System.Numerics; // Xenon-tweak
+using Robust.Client.GameObjects; // Xenon-tweak
+
 namespace Content.Trauma.Client.Physics;
 
 /// <summary>

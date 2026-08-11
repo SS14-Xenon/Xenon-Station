@@ -2,15 +2,12 @@
 
 - type: entity
   name: basic slime
-  id: BaseMobAdultSlimes
-  parent: [ BaseMobSlimes, SimpleMobBase, MobCombat, BaseSlicingRefinable, MobNightVision, BaseMobDestructible,
-    BaseSlimeJigglePhysics ] # Trauma
+  id: BaseMobAdultSlime
+  parent: [ SimpleMobBase, MobCombat, BaseSlimeJigglePhysics ] # Trauma
   abstract: true
   description: It looks so much like jelly. I wonder what it tastes like?
   components:
-  # <Trauma>
-  - type: VentCrawler
-  # </Trauma>
+  - type: VentCrawler # goobstation - Ventcrawl
   - type: Sprite
     drawdepth: Mobs
     sprite: Mobs/Aliens/slimes.rsi
