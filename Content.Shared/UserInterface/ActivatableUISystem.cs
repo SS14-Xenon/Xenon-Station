@@ -105,7 +105,7 @@ public sealed partial class ActivatableUISystem : EntitySystem
 
         args.Verbs.Add(new AlternativeVerb
         {
-            Act = () => InteractUI(args.User, uid, component),
+            Act = () => InteractUI(args.User, (uid, component)), // Stellar - interaction particles
             Text = Loc.GetString(component.VerbText),
             // TODO VERB ICON find a better icon
             Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/settings.svg.192dpi.png")),

@@ -85,9 +85,9 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] private   readonly SharedStaminaSystem _stamina = default!;
     [Dependency] private   readonly DamageExamineSystem _damageExamine = default!;
     [Dependency] private   readonly TagSystem _tag = default!;
-    [Dependency] private EntityQuery<DamageableComponent> _damageQuery = default!;
     // ES START
     [Dependency] private ESScreenshakeSystem _shake = default!;
+    // ES END
 
     //Goob - Shove
     private float _shoveRange;
@@ -113,8 +113,6 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
     //Goob - Shove
 
     public const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque); // WD EDIT: private -> public
-    // ES END
-    private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
 
     /// <summary>
     /// Maximum amount of targets allowed for a wide-attack.
@@ -1113,7 +1111,7 @@ public abstract class SharedMeleeWeaponSystem : EntitySystem
         // Goobstation end
 
         PhysicalShove(user, target);
-        Interaction.DoContactInteraction(user, target);
+        Interaction.DoContactInteraction(user, target, null, true); // Stellar - interaction particles
 
         if (MobState.IsIncapacitated(target))
             return true;

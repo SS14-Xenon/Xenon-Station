@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 using System.Numerics;
+using Content.Shared._ES.Camera; // ES
 using Content.Shared._Goobstation.Wizard.ScryingOrb;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Managers;
