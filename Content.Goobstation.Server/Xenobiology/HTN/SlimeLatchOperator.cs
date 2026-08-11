@@ -6,6 +6,7 @@ using Content.Server.NPC;
 using Content.Server.NPC.HTN;
 using Content.Server.NPC.HTN.PrimitiveTasks;
 using Content.Shared.DoAfter;
+using Robust.Shared.Map; // Xenon-tweak
 
 namespace Content.Goobstation.Server.Xenobiology.HTN;
 
@@ -16,6 +17,11 @@ public sealed partial class SlimeLatchOperator : HTNOperator
 
     [DataField]
     public string LatchKey = string.Empty;
+
+    // Xenon-tweak start
+    [DataField]
+    public float MaxTargetDistance = 7f;
+    // Xenon-tweak end
 
     public override void Initialize(IEntitySystemManager sysManager)
     {
@@ -35,6 +41,18 @@ public sealed partial class SlimeLatchOperator : HTNOperator
 
         if (_slimeLatch.IsLatched((owner, slime), target))
             return HTNOperatorStatus.Finished;
+
+        // Xenon-tweak start
+        if (target != default
+            && MaxTargetDistance > 0
+            && _entManager.TryGetComponent<TransformComponent>(owner, out var ownerXform)
+            && _entManager.TryGetComponent<TransformComponent>(target, out var targetXform)
+            && (!ownerXform.Coordinates.TryDistance(_entManager, targetXform.Coordinates, out var distance)
+                || distance > MaxTargetDistance))
+        {
+            return HTNOperatorStatus.Failed;
+        }
+        // Xenon-tweak end
 
         if (_entManager.HasComponent<ActiveDoAfterComponent>(owner))
             return HTNOperatorStatus.Continuing;

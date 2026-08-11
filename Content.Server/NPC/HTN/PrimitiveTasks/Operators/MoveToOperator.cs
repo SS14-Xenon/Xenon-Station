@@ -78,6 +78,14 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
     [DataField]
     public string DirectMoveTargetKey = "DirectMoveTarget";
 
+    // Xenon-tweak start
+    /// <summary>
+    /// If greater than zero, the task fails once the target is farther than this distance.
+    /// </summary>
+    [DataField]
+    public float MaxTargetDistance;
+    // Xenon-tweak end
+
     private const string MovementCancelToken = "MovementCancelToken";
 
     public override void Initialize(IEntitySystemManager sysManager)
@@ -206,6 +214,17 @@ public sealed partial class MoveToOperator : HTNOperator, IHtnConditionalShutdow
 
         if (!_entManager.TryGetComponent<NPCSteeringComponent>(owner, out var steering))
             return HTNOperatorStatus.Failed;
+
+        // Xenon-tweak start
+        if (MaxTargetDistance > 0
+            && blackboard.TryGetValue<EntityCoordinates>(TargetKey, out var targetCoordinates, _entManager)
+            && _entManager.TryGetComponent<TransformComponent>(owner, out var xform)
+            && (!xform.Coordinates.TryDistance(_entManager, targetCoordinates, out var distance)
+                || distance > MaxTargetDistance))
+        {
+            return HTNOperatorStatus.Failed;
+        }
+        // Xenon-tweak end
 
         // Just keep moving in the background and let the other tasks handle it.
         if (ShutdownState == HTNPlanState.PlanFinished && steering.Status == SteeringStatus.Moving)

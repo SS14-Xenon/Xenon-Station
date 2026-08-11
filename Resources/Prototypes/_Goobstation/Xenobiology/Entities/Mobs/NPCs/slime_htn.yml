@@ -53,9 +53,11 @@
         pathfindInPlanning: false
         targetKey: MovementTarget
         rangeKey: MeleeRange
+        maxTargetDistance: 7 # Xenon-tweak
     - !type:HTNPrimitiveTask
       operator: !type:SlimeLatchOperator
         latchKey: LatchTarget
+        maxTargetDistance: 7 # Xenon-tweak
     - !type:HTNPrimitiveTask
       preconditions:
       - !type:KeyExistsPrecondition

@@ -173,7 +173,7 @@ public sealed partial class SlimeLatchSystem : EntitySystem
         var doAfterArgs = new DoAfterArgs(EntityManager, ent, ent.Comp.LatchDoAfterDuration, new SlimeLatchDoAfterEvent(), ent, target)
         {
             BreakOnDamage = true,
-            BreakOnMove = true,
+           // BreakOnMove = true, // Xenon-tweak
         };
 
         EnsureComp<BeingLatchedComponent>(target);
@@ -217,7 +217,18 @@ public sealed partial class SlimeLatchSystem : EntitySystem
         if (!CanLatch(ent, target))
             return false;
 
-        return StartSlimeLatchDoAfter(ent, target);
+        // Xenon-tweak start
+        if (_gameTiming.CurTime < ent.Comp.NextLatchAttempt)
+            return false;
+
+        if (StartSlimeLatchDoAfter(ent, target))
+        {
+            ent.Comp.NextLatchAttempt = _gameTiming.CurTime + ent.Comp.LatchRetryCooldown;
+            return true;
+        }
+
+        return false;
+        // Xenon-tweak end
     }
 
     public void Latch(Entity<SlimeComponent> ent, EntityUid target)

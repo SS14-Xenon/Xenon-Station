@@ -67,6 +67,23 @@ public sealed partial class SlimeComponent : Component
     [DataField]
     public TimeSpan LatchDoAfterDuration = TimeSpan.FromSeconds(1);
 
+    // Xenon-tweak start
+
+    /// <summary>
+    /// Minimum delay between NPC latch attempts. Prevents infinite retry spam
+    /// when the target is out of range or the do-after keeps failing.
+    /// </summary>
+    [DataField]
+    public TimeSpan LatchRetryCooldown = TimeSpan.FromSeconds(4);
+
+    /// <summary>
+    /// When the next NPC latch attempt is allowed.
+    /// </summary>
+    [DataField]
+    public TimeSpan NextLatchAttempt;
+
+    // Xenon-tweak end
+
     /// <summary>
     /// The entity which has tamed this slime.
     /// </summary>
