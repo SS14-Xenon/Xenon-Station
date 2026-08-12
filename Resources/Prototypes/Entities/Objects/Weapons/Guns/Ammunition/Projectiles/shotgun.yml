@@ -55,7 +55,7 @@
   - type: ProjectileSpread
     proto: PelletShotgun
     count: 6
-    spread: 15
+    spread: 25 # Xenon edit, was 15
 
 - type: entity
   parent: BaseBulletIncendiary
@@ -79,7 +79,7 @@
   - type: ProjectileSpread
     proto: PelletShotgunIncendiary
     count: 6 # Xenon edit, was 4
-    spread: 15
+    spread: 25 # Xenon edit, was 15
 
 - type: entity
   parent: BaseBulletPractice
@@ -100,7 +100,7 @@
   - type: ProjectileSpread
     proto: PelletShotgunPractice
     count: 6
-    spread: 15
+    spread: 25 # Xenon edit, was 15
 
 - type: entity
   parent: BaseBullet # Xenon edit
@@ -215,7 +215,7 @@
   - type: ProjectileSpread
     proto: PelletShotgunUranium
     count: 6 # Xenon edit, was 5
-    spread: 6
+    spread: 25 # Xenon edit, was 6
 
 - type: entity
   parent: BaseBullet
