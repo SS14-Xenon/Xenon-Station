@@ -42,7 +42,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 7 # Xenon edit, was 10
+        Piercing: 8 # Xenon edit, was 10
         Structural: 15
       woundSeverityMultipliers:
         Piercing: 1.5 # Minced Meat
@@ -66,7 +66,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 5 # Xenon edit, was 7
+        Piercing: 6 # Xenon edit, was 7
         # Heat: 3 # Xenon edit
   - type: IgnitionSource
     ignited: true
@@ -204,7 +204,7 @@
     damage:
       types:
         # Radiation: 5 # Xenon edit
-        Piercing: 5
+        Piercing: 6
       armorPenetration: 0.5 # Xenon edit
 
 - type: entity

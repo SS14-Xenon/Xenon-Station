@@ -9,7 +9,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 11 # Xenon edit
+        Piercing: 13 # Xenon edit
 
 - type: entity
   parent: BaseBulletPractice
@@ -31,7 +31,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 9 # Xenon edit
+        Piercing: 11 # Xenon edit
         # Heat: 4 # Xenon edit
 
 - type: entity
@@ -44,5 +44,5 @@
     damage:
       types:
         # Radiation: 6
-        Piercing: 9 # Xenon edit
+        Piercing: 11 # Xenon edit
       armorPenetration: 0.5 # Xenon edit

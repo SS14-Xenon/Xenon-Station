@@ -9,7 +9,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 14 # Xenon edit
+        Piercing: 16 # Xenon edit
       armorPenetration: -0.39 # Xenon edit
 
 - type: entity

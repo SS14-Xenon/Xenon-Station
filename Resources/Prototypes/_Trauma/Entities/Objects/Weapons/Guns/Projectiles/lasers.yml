@@ -53,7 +53,7 @@
   - type: Projectile
     damage:
       types:
-        Heat: 12 # This is a super shitty ranged weapon it should not be good DPS wise.
+        Heat: 14 # This is a super shitty ranged weapon it should not be good DPS wise.
 
 # Longarms
 
@@ -77,7 +77,7 @@
   - type: Projectile
     damage:
       types:
-        Heat: 14
+        Heat: 16
 
 - type: entity
   parent: SidearmBulletBase
@@ -148,7 +148,7 @@
     - BlobImpassable
     damage:
       types:
-        Heat: 16
+        Heat: 18
 
 - type: entity
   id: LaserCannonBullet
@@ -164,7 +164,7 @@
     impactEffect: BulletImpactEffectOrangeDisabler
     damage:
       types:
-        Heat: 20
+        Heat: 22
   - type: IgniteOnCollide
     fireStacks: 1
 
@@ -197,7 +197,7 @@
   - type: Projectile
     damage:
       types:
-        Heat: 8
+        Heat: 10
   - type: BlurOnCollide
     blurTime: 3
 
@@ -210,7 +210,7 @@
     impactEffect: BulletImpactEffectOrangeDisabler
     damage:
       types:
-        Heat: 16
+        Heat: 18
   - type: Sprite
     sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
     layers:
@@ -226,7 +226,7 @@
     damage:
       types:
         Ion: 16
-        Heat: 4
+        Heat: 6
   - type: Sprite
     layers:
     - state: lightbolt
@@ -244,7 +244,7 @@
     - BlobImpassable
     damage:
       types:
-        Heat: 12
+        Heat: 14
   - type: Sprite
     layers:
     - state: lightbolt
@@ -261,7 +261,7 @@
     impactEffect: BulletImpactEffectOrangeDisabler
     damage:
       types:
-        Heat: 12
+        Heat: 14
   - type: Sprite
     layers:
     - state: lightbolt
@@ -280,7 +280,7 @@
     impactEffect: BulletImpactEffectOrangeDisabler
     damage:
       types:
-        Heat: 7
+        Heat: 9
   - type: Sprite
     sprite: Objects/Weapons/Guns/Projectiles/projectiles_tg.rsi
     layers:
@@ -296,7 +296,7 @@
     damage:
       types:
         Ion: 7
-        Heat: 2
+        Heat: 4
   - type: Sprite
     layers:
     - state: lightbolt
@@ -313,7 +313,7 @@
     - BlobImpassable
     damage:
       types:
-        Heat: 5
+        Heat: 7
   - type: Sprite
     layers:
     - state: lightbolt
@@ -328,7 +328,7 @@
     impactEffect: BulletImpactEffectOrangeDisabler
     damage:
       types:
-        Heat: 5
+        Heat: 7
   - type: Sprite
     layers:
     - state: lightbolt
