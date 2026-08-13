@@ -4,6 +4,7 @@ using Content.Goobstation.Common.Body;
 using Content.Shared._Shitmed.Body.Organ;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
+using Content.Shared.Body.Organ; // Xenon-tweak
 using Content.Shared.Ghost;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
@@ -40,6 +41,13 @@ namespace Content.Shared.Body.Systems
                 return;
 
             // goob end
+
+            // Xenon-tweak start
+            if (TryComp<OrganComponent>(uid, out var organ))
+                organ.OriginalBody = args.OldBody;
+
+            QueueLocalEvent(new BrainRemovedFromBodyRefreshEvent(args.OldBody));
+            // Xenon-tweak end
 
             brain.Active = false;
             if (!CheckOtherBrains(args.OldBody))

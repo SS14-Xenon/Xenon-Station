@@ -7,6 +7,13 @@ using Robust.Shared.Player;
 
 namespace Content.Shared.Mind;
 
+// Xenon-tweak start
+public sealed class BrainRemovedFromBodyRefreshEvent(EntityUid body) : EntityEventArgs
+{
+    public EntityUid Body = body;
+}
+// Xenon-tweak end
+
 public sealed class MindExamineSystem : EntitySystem
 {
     [Dependency] private readonly MobStateSystem _mobState = default!;
@@ -23,6 +30,8 @@ public sealed class MindExamineSystem : EntitySystem
         SubscribeLocalEvent<MindExaminableComponent, MindAddedMessage>((e, ref _) => RefreshMindStatus(e.AsNullable()));
         SubscribeLocalEvent<MindExaminableComponent, MindRemovedMessage>((e, ref _) => RefreshMindStatus(e.AsNullable()));
         SubscribeLocalEvent<MindExaminableComponent, MobStateChangedEvent>((e, ref _) => RefreshMindStatus(e.AsNullable()));
+
+        SubscribeLocalEvent<BrainRemovedFromBodyRefreshEvent>(ev => RefreshMindStatus(ev.Body)); // Xenon-tweak
 
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetached);
@@ -102,6 +111,8 @@ public sealed class MindExamineSystem : EntitySystem
         var hasUserId = mindComp?.UserId;
         var hasActiveSession = hasUserId != null && _player.ValidSessionId(hasUserId.Value);
 
+        var hasDetachedSoul = hasUserId == null && _mind.TryGetDetachedMind(ent.Owner, out _); // Xenon-tweak
+
         // Scenarios:
         // 1. Dead + No User ID: Entity is dead and has no mind attached
         // 2. Dead + Has User ID + No Session: Player died and disconnected
@@ -110,7 +121,7 @@ public sealed class MindExamineSystem : EntitySystem
         // 5. Alive + No Session: Player disconnected while alive (SSD)
 
         if (dead && hasUserId == null)
-            ent.Comp.State = MindState.Irrecoverable;
+            ent.Comp.State = hasDetachedSoul ? MindState.Dead : MindState.Irrecoverable; // Xenon-tweak
         else if (dead && !hasActiveSession)
             ent.Comp.State = MindState.DeadSSD;
         else if (dead)

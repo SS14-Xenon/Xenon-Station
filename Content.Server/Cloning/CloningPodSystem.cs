@@ -27,6 +27,7 @@ using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
 using Robust.Server.Containers;
 using Robust.Server.Player;
+using Robust.Shared.Player; // Xenon-tweak
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
@@ -145,7 +146,7 @@ public sealed class CloningPodSystem : EntitySystem
         args.PushMarkup(Loc.GetString("cloning-pod-biomass", ("number", _material.GetMaterialAmount(ent.Owner, ent.Comp.RequiredMaterial))));
     }
 
-    public bool TryCloning(EntityUid uid, EntityUid bodyToClone, Entity<MindComponent> mindEnt, CloningPodComponent? clonePod, float failChanceModifier = 1)
+    public bool TryCloning(EntityUid uid, EntityUid bodyToClone, Entity<MindComponent>? mindEnt, CloningPodComponent? clonePod, float failChanceModifier = 1) // Xenon-tweak
     {
         if (!Resolve(uid, ref clonePod))
             return false;
@@ -153,7 +154,17 @@ public sealed class CloningPodSystem : EntitySystem
         if (HasComp<ActiveCloningPodComponent>(uid))
             return false;
 
-        var mind = mindEnt.Comp;
+        // Xenon-tweak start
+        MindComponent? mind = null;
+        ICommonSession? client = null;
+        if (mindEnt is { } foundMind)
+        {
+            mind = foundMind.Comp;
+            if (foundMind.Comp.UserId == null || !_playerManager.TryGetSessionById(foundMind.Comp.UserId.Value, out client))
+                return false;
+        }
+        // Xenon-tweak end
+
         // Goobstation - allowing cloning living people
         /*
         if (ClonesWaitingForMind.TryGetValue(mind, out var clone))
@@ -173,10 +184,6 @@ public sealed class CloningPodSystem : EntitySystem
         if (mind.OwnedEntity != null && !_mobStateSystem.IsDead(mind.OwnedEntity.Value))
             return false; // Body controlled by mind is not dead
         */
-
-        // Yes, we still need to track down the client because we need to open the Eui
-        if (mind.UserId == null || !_playerManager.TryGetSessionById(mind.UserId.Value, out var client))
-            return false; // If we can't track down the client, we can't offer transfer. That'd be quite bad.
 
         if (!TryComp<PhysicsComponent>(bodyToClone, out var physics))
             return false;
@@ -232,8 +239,13 @@ public sealed class CloningPodSystem : EntitySystem
         cloneMindReturn.Parent = uid;
         cloneMindReturn.Original = bodyToClone; // Goobstation
         _containerSystem.Insert(mob.Value, clonePod.BodyContainer);
-        ClonesWaitingForMind.Add(mind, mob.Value);
-        _euiManager.OpenEui(new AcceptCloningEui(mindEnt, mind, this), client);
+        // Xenon-tweak start
+        if (mind != null && client != null)
+        {
+            ClonesWaitingForMind.Add(mind, mob.Value);
+            _euiManager.OpenEui(new AcceptCloningEui(mindEnt!.Value, mind, this), client);
+        }
+        // Xenon-tweak end
 
         UpdateStatus(uid, CloningPodStatus.NoMind, clonePod);
         AddComp<ActiveCloningPodComponent>(uid);

@@ -9,10 +9,13 @@ using Content.Shared._EinsteinEngines.Language.Systems; // Goobstation
 using Content.Goobstation.Common.Mind;
 using Content.Shared._EinsteinEngines.Silicon.Components; // Goobstation
 using Content.Shared.Administration.Logs;
+using Content.Shared.Body.Components; // Xenon-tweak
+using Content.Shared.Body.Organ; // Xenon-tweak
 using Content.Shared.Database;
 using Content.Shared.Emoting;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
+using Content.Shared.Ghost; // Xenon-tweak
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Components;
@@ -562,6 +565,49 @@ public abstract partial class SharedMindSystem : EntitySystem
         mindId = default;
         return false;
     }
+
+    // Xenon-tweak start
+    public bool TryGetDetachedMind(EntityUid body, [NotNullWhen(true)] out Entity<MindComponent> mindEnt)
+    {
+        mindEnt = default;
+
+        // Look for a detached brain (possibly inside a severed head) that came from this body
+        // and still holds the mind.
+        var brainQuery = EntityQueryEnumerator<BrainComponent, OrganComponent, MindContainerComponent>();
+        while (brainQuery.MoveNext(out var brainUid, out _, out var organ, out var mindContainer))
+        {
+            if (organ.Body != null || organ.OriginalBody != body || mindContainer.Mind is not { } mindId)
+                continue;
+
+            if (!TryComp<MindComponent>(mindId, out var mind))
+                continue;
+
+            // The mind must not have been transferred to another entity or role.
+            if (mind.OwnedEntity != brainUid)
+                continue;
+
+            mindEnt = new Entity<MindComponent>(mindId, mind);
+            return true;
+        }
+
+        // Fallback: the mind might be on the owner's ghost (e.g. the head was destroyed).
+        var ghostName = MetaData(body).EntityName;
+        var ghostQuery = EntityQueryEnumerator<GhostComponent, MindContainerComponent>();
+        while (ghostQuery.MoveNext(out var ghostUid, out _, out var mindContainer))
+        {
+            if (mindContainer.Mind is not { } mindId || !TryComp<MindComponent>(mindId, out var mind))
+                continue;
+
+            if (mind.CharacterName != ghostName)
+                continue;
+
+            mindEnt = new Entity<MindComponent>(mindId, mind);
+            return true;
+        }
+
+        return false;
+    }
+    // Xenon-tweak end
 
     /// <summary>
     /// Sets the Mind's UserId, Session, and updates the player's PlayerData. This should have no direct effect on the

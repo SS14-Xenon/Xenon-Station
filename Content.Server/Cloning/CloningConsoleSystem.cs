@@ -166,13 +166,26 @@ namespace Content.Server.Cloning
             if (body is null)
                 return;
 
-            if (!_mindSystem.TryGetMind(body.Value, out var mindId, out var mind))
-                return;
+            Entity<MindComponent>? mindEnt = null; // Xenon-tweak
 
-            if (mind.UserId.HasValue == false || !_playerManager.ValidSessionId(mind.UserId.Value))
-                return;
+            // Xenon-tweak start
+            if (_mindSystem.TryGetMind(body.Value, out var mindId, out var mind))
+            {
+                if (mind.UserId.HasValue == false || !_playerManager.ValidSessionId(mind.UserId.Value))
+                    return;
 
-            if (_cloningPodSystem.TryCloning(cloningPodUid, body.Value, (mindId, mind), cloningPod, scannerComp.CloningFailChanceMultiplier))
+                mindEnt = (mindId, mind);
+            }
+            else if (_mindSystem.TryGetDetachedMind(body.Value, out var detachedMind))
+            {
+                if (detachedMind.Comp.UserId.HasValue == false || !_playerManager.ValidSessionId(detachedMind.Comp.UserId.Value))
+                    return;
+
+                mindEnt = detachedMind;
+            }
+            // // Xenon-tweak end
+
+            if (_cloningPodSystem.TryCloning(cloningPodUid, body.Value, mindEnt, cloningPod, scannerComp.CloningFailChanceMultiplier)) // Xenon-tweak
                 _adminLogger.Add(LogType.Action, LogImpact.Medium, $"{ToPrettyString(uid)} successfully cloned {ToPrettyString(body.Value)}.");
 
             _damage.TryChangeDamage(body.Value, cloningPod.CloneDamage, true); // Goobstation - Damage the og body if the clone successful
@@ -222,9 +235,10 @@ namespace Content.Server.Cloning
                     }
                     else
                     {
-                        if (!_mindSystem.TryGetMind(scanBody.Value, out _, out var mind) ||
-                            mind.UserId == null ||
-                            !_playerManager.TryGetSessionById(mind.UserId.Value, out _))
+                        // Xenon-tweak start
+                        if (_mindSystem.TryGetMind(scanBody.Value, out _, out var mind) &&
+                            (mind.UserId == null || !_playerManager.TryGetSessionById(mind.UserId.Value, out _)))
+                        // Xenon-tweak end
                         {
                             clonerStatus = ClonerStatus.NoMindDetected;
                         }
