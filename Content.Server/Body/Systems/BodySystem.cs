@@ -197,11 +197,6 @@ public sealed partial class BodySystem : SharedBodySystem // Shitmed change: mad
 
     protected override void RemoveBodyMarkings(EntityUid target, BodyPartAppearanceComponent partAppearance, HumanoidAppearanceComponent bodyAppearance)
     {
-        foreach (var (visualLayer, markingList) in partAppearance.Markings)
-            foreach (var marking in markingList)
-                _humanoidSystem.RemoveMarking(target, marking.MarkingId, sync: false, humanoid: bodyAppearance);
-
-        Dirty(target, bodyAppearance);
     }
 
     private void OnGibTorsoAttempt(Entity<BodyPartComponent> ent, ref AttemptEntityGibEvent args)

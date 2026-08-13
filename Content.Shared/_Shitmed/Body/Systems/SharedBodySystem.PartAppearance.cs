@@ -190,6 +190,11 @@ public partial class SharedBodySystem
             _humanoid.SetLayerVisibility((target, bodyAppearance), visualLayer, true);
             foreach (var marking in markingList)
             {
+                // Xenon-tweak start
+                if (bodyAppearance.MarkingSet.Markings.Values.Any(list => list.Any(m => m.MarkingId == marking.MarkingId)))
+                    continue;
+                // Xenon-tweak end
+
                 _humanoid.AddMarking(target, marking.MarkingId, marking.MarkingColors, true, true, bodyAppearance);
             }
         }

@@ -9,12 +9,12 @@ public sealed partial class CharacterFlavorComponent : Component
     /// <summary>
     /// основной текст флавора, описание персонажа
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField] // Xenon-tweak
     public string FlavorText = string.Empty;
     /// <summary>
     /// ссылка на изображение, что будет использоваться в качестве хэдшота
     /// </summary>
-    [ViewVariables(VVAccess.ReadWrite), AutoNetworkedField]
+    [ViewVariables(VVAccess.ReadWrite), DataField, AutoNetworkedField] // Xenon-tweak
     public string HeadshotUrl = string.Empty;
 }
 

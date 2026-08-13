@@ -103,6 +103,8 @@
   copyEquipment: null
   copyInternalStorage: false
   copyImplants: false
+  components:
+  - CharacterFlavor # Xenon-tweak
 
 # for paradox clones
 - type: cloningSettings
